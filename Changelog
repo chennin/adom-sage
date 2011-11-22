@@ -1,0 +1,53 @@
+Version 0.9.1
+Added support for ADOM 1.1.1
+Bugfix: Weapon stats for broken or rusty weapons should show correctly now
+Bugfix: Monsters' full names are once again shown when 'l'ooking at them
+Bugfix: Backslash in commands wasn't handled properly
+Bugfix: Fixed compile error for Debian Linux
+
+Version 0.9.0
+Added support for ADOM 1.1.0
+Added Sage-specific commands: see sage.kbd in your adom_dat or .adom.data
+directory
+New commands: set dynamic display to x
+New command: repeat last command
+Added macros: see Macro_... in sage.cfg and MC... in sage.kbd
+Added mouse support to Windows
+Can now press < or > (or whatever your ascend/descend commands are) while
+teleporting to move cursor to staircase
+Added workaround for ADOM 1.1.0's no-flg bug
+Added several examples of messages to suppress to the default sage.msg file
+New Cursor_Style: block
+Bugfix: Message glitch during auto-swap
+Bugfix: Weapon stats weren't computed properly for negative damage modifiers
+Windows bugfix: Fixed support for non-US keyboards
+Windows bugfix: Fixed memory errors on Win 9x/ME machines
+Windows bugfix: Screenshots now work properly
+Improved Sage's initialization when run for the first time
+Can press Z, space, or enter to exit monster memory
+
+Version 0.8.3
+Initial Windows release
+Bugfix: Trying to auto-swap while swimming would lock up the game
+Bugfix: Sage didn't work if the .adom.cfg file had a Name option specified
+Bugfix: Sage wouldn't work under Linux if ADOM was installed setuid.
+It still won't work, but at least it lets you know why now.
+Fixed some typos in the README file
+
+Version 0.8.2
+Bugfix: Sage became confused if leveling up with no skill advances
+Bugfix: Sage became confused by the "switch required more key" command
+Bugfix: Sage became confused if an invalid key was pressed while selecting
+selecting a location for naming, teleport control, or GTB
+Bugfix: Fire resistance messages were not properly suppressed in the ToEF
+
+Version 0.8.1
+Bugfix: Leveling up with more than one screen of skills was broken
+Bugfix: Suppressed messages' color schemes could be randomly applied to other
+messages
+Bugfix: Sage could become confused while talking to Mad Minstrel
+Bugfix: Sage became confused if checking required experience at level 50
+
+Version 0.8.0
+Initial release
+

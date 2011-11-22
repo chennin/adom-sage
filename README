@@ -1,0 +1,383 @@
+README FILE for ADOM Sage version 0.9.0, by Josh Kelley (kelley@cs.utk.edu)
+A frontend for ADOM 1.0.0 and 1.1.0
+ADOM Sage is Copyright (c) 2002 by Josh Kelley
+ADOM is Copyright (c) 1994-2002 by Thomas Biskup
+
+
+Brief Description
+-----------------
+ADOM Sage is a frontend to ADOM that adds various usability enhancements and
+minor bugfixes.  A quick list of added features:
+ * Colored messages
+ * Spell and mindcraft screens now display range, damage, and duration.
+ * Macros
+ * Support for block- and line-drawing characters (instead of #, -, |)
+ * Support for alternate cursor styles
+ * Mouse support while targeting (currently only on Linux)
+ * Suppression of excess messages while in the ToEF
+ * The ability to automatically swap places with neutral creatures
+ * Shortened monster names (e.g.,"Kranach" instead of "Kranach,the raider lord")
+ * Commands to set the dynamic display or to repeat the last command entered
+ * Pressing < or > while teleporting moves the cursor to the up/down stairs
+ * Several other miscellaneous features
+All of these options can be separately enabled or disabled.
+
+
+Disclaimer
+----------
+I am not affiliated with ADOM or with Thomas Biskup in any way.
+Please do not send Thomas bug reports based off of bugs encountered
+    while playing ADOM through ADOM Sage.  There's a pretty good chance
+    that the bug is actually in ADOM Sage; please confirm that the
+    bug exists when playing ADOM without the Sage before submitting it
+    to Thomas.
+Please do not send RFEs (requests for enhancement) to Thomas based off
+    of features in ADOM Sage.  Most of these features have already
+    been RFE'd.  If you want to submit an RFE base off of a feature in
+    ADOM Sage anyway, please at least first submit it for discussion to
+    the rec.games.roguelike.adom newsgroup.
+
+
+Quick Start (Linux)
+------------------
+If you downloaded the source package, run make.
+Copy adom-sage and adom-sage.so to the same directory as adom.
+Whenever you wish to play ADOM, run adom-sage instead of adom.
+If your screen looks ugly, please see the section on Graphics.
+For more information on ADOM Sage's features or on how to enable or
+disable various features, read on.
+
+
+Flags to adom-sage
+------------------
+ADOM Sage supports several command-line options.  Run it with the -h or
+--help option to get a brief summary.  Here's a more detailed description
+of the options:
+
+-d x or --debug-level=x
+        Sets debug level to x (a number, may be hex or octal).
+        The default debug level is 1, which means to log errors only.
+        A debug level of 3 means to log message processing and may
+        be useful for setting up your own message lists (see below).
+        Other debug levels are only of use when debugging or editing
+        the source.
+        Debug messages are sent to /tmp/sage.log by default.
+-l filename or --logfile=filename
+        Change the destination of debug messages.
+-a filename or --adom-path=filename
+-s filename or --sage-path=filename
+        Specify a different location for the adom binary and the
+        adom-sage.so library, respectively.  By default, ADOM Sage
+        looks for these in first in its own directory, second in the
+        directories specified by your $PATH environment variable.
+-p or --passive
+        Runs without modifying gameplay any; only logs (some) debug messages.
+        Useful while debugging or editing the source.
+
+You may also run ADOM Sage with an option of '--'.  This signifies the
+end of options for ADOM Sage; any further options are passed to ADOM.
+
+
+Configuration
+-------------
+ADOM Sage uses three config files in your ~/.adom.data directory:
+sage.cfg, sage.msg, and sage.kbd.  The sage.cfg file is the configuration
+file for the Sage's various features.  The sage.msg file defines the
+colors assigned to different messages.  The sage.kbd is the keymap file
+for Sage's commands (i.e., it defines which keys you press to activate
+some of Sage's features).  The first time you run ADOM Sage, these files
+are created with reasonable defaults.
+
+
+The sage.cfg File - ADOM Sage's features
+----------------------------------------
+The format for the configuration file is similar to ADOM's config files.
+Each line should be of the format
+    <variable> = <name>
+Blank lines and lines starting with '#' are ignored.
+
+Details on the different options:
+
+Auto_Swap_Neutral: If true, automatically swap places with neutral
+monsters instead of asking if you wish to attack them.
+
+Cursor_Style: Alters how the cursor is displayed.  The following options
+are allowed:
+    default - Show the cursor in the default style.
+    hide - Hides the cursor altogether.
+    block - Shows a block cursor.
+    underline - Forces the cursor to display as an underline.  Requires that
+        your terminal supports underlined characters; if you're using the
+        console, it probably doesn't.
+    reverse - Forces the cursor to display as reverse video, which is similar
+        to the block cursor used by many terminal emulators but may have a
+        different color scheme.
+
+Draw_Dots: If true, replace '.' with bullet symbols.  See the section
+on graphics for more details.
+
+Draw_Blocks: If true, replace '#' with block symbols.  See the section
+on graphics for more details.
+
+Draw_Lines: If true, replace '-' and '|' with line symbols.  See the
+section on graphics for more details.
+
+Fast_More: If true, any key will be accepted when the '(more)' prompt is
+displayed.  In other words, this has the same effect as ADOM's Fast_More
+option, but ADOM Sage currently doesn't check ADOM's Fast_More option
+or saved game options, so you have to set this option instead.
+
+Fast_Selling: If true, shortens a couple of messages while selling stuff
+to stores and removes a couple of others.  The result is that you'll never
+have to sit through a '(more)' prompt while selling a stack of stuff.
+May not be to some players' liking, so disabled by default.
+
+Fix_Flgs: Enables the workaround for the no-flgs bug in ADOM 1.1.0.
+
+Fix_Typos: If true, fixes a couple of typos in ADOM.
+
+Macro_0 through Macro_9 and Macro_A through Macro_Z: Defines any number of
+macros for use in ADOM Sage.  See the section on macros for details.
+
+Mindcraft_Stats: If true, display information on the current effectiveness
+of various abilities on the Invoke Mindcraft screen.
+
+More_Weapon_Stats: If true, the various 'display weapon statistics'
+commands ('W', 'K', and 'M') display damages as (min-max, avg) format
+in addition to dice+adds format.
+
+Mouse: If true, enables mouse support while targeting.  See the mouse
+section for details.
+
+Quiet_Macros: If true, the screen won't be updated while running a macro.
+
+Short_Alchemy: If true, shortens the alchemy display to always fit on
+one screen.  Disabled by default.
+
+Short_Named_Monsters: If true, shortens references to named monsters.
+For example, you'll see 'Tywatt Pare' and 'Rover' instead of 'Tywatt Pare,
+the sheriff' or 'Rover, the large dog'.  You'll still see the full name
+when 'l'ooking at a monster.
+
+Spell_Stats: If true, displays damage, range, and duration (where
+appropriate) from the spellcasting screen.  This parameter has no effect
+for ADOM 1.1.0, which already has spell stats built in.
+
+Suppress_ToEF: If true, suppress extra messages in the Tower of Eternal
+Flames.
+
+
+The sage.msg file - Color-coding Messages
+-----------------------------------------
+The sage.msg file configures how messages are color-coded.  You can also
+define special handling for certain messages, as described below.
+
+The sage.msg file consists of lists of directives and messages.
+Each directive affects how subsequent messages are handled.  Blank lines
+and lines starting with '#' are ignored.
+
+Directives start with a colon.  You can specify any of the colors recognized
+by ADOM as directives:
+    :blue
+    :green
+    :cyan
+    :red
+    :magenta
+    :brown
+    :light gray
+    :dark gray
+    :light blue
+    :light green
+    :light cyan
+    :light red
+    :light magenta
+    :yellow
+    :white
+
+You can also specify three special directives:
+    :no_skip - message cannot be skipped by pressing Enter at a '(more)' prompt
+    :allow_skip - normal handling for a message
+    :suppress - message will not display at all
+
+Short example:
+
+    # Stat gain
+    :no_skip
+    :light green
+    Your muscles feel stronger!
+    Your senses sharpen!
+
+    # Stat loss
+    :red
+    You seem to get less perceptive.
+
+'Your muscles feel stronger!' will be displayed in light green and
+cannot be skipped by pressing Enter at a '(more)' prompt.  Same with
+'Your senses sharpen!'.  'You seem to get less perceptive.' will display
+as red.  It also cannot be skipped by pressing Enter; the file lists
+:no_skip before it and doesn't change that, even though it's a new block
+of messages.
+
+You can add your own messages to the sage.msg file if you wish, but
+the messages that you add must match exactly the internal format used
+by ADOM.  To determine ADOM's internal format for a particular message,
+run adom-sage with the --debug-level=3 option and check /tmp/sage.log
+after running.  Note that some messages are processed in multiple
+stages; you may see several 'Message  in' and 'Message out' entries in
+/tmp/sage.log for a single 'New message'.  For message coloring and
+no_skip setup, you can list any of the 'message in' or 'message out'
+messages for message coloring and no_skip setup.  For suppress to work
+properly, you must list the final message in or message out.
+
+The default sage.msg file contains several messages that you may wish
+to suppress.  These messages are commented out; to actually suppress them,
+delete the initial '#' from each line.
+
+
+The sage.kbd file - Commands Added by ADOM Sage
+-----------------------------------------------
+The commands added by ADOM Sage are defined here.  If you don't want
+to use one or more of the added commands, you can comment them out or
+delete them from this file.
+
+This file is of the same format as the adom.kbd or .adom.kbd file.
+The adom.kbd or .adom.kbd file and appendix D of ADOM's manual contain
+more information about the format to use here.
+
+If you've modified your ADOM keymap, then the default values here may
+conflict with what your changes.  If so, you'll probably have to edit
+sage.kbd for ADOM Sage to work correctly.
+
+ADOM Sage adds the following commands to ADOM:
+
+Macros 0-9 and A-Z: See the section on macros for example.  By default,
+Alt-0 through Alt-9 will activate macros 0-9; macros A-Z aren't enabled
+by default.
+
+Repeat last command (default key: '): Repeats the sequence of keys that
+you pressed to enter your last command.  For example, if you tried to
+pickpocket an enemy to the south on your previous turn, then issue this
+command, you will again attempt to pickpocket an enemy to the south.
+If your opponent to the south moved, then you'll miss.
+
+Set dynamic display to x: ADOM allows you to cycle through the various
+settings for the dynamic display (in the lower right corner of the
+screen) by pressing :t.  With these commands, you can jump directly to
+the desired display without cycling through all of the options.
+Default keys for these commands:
+    Alt-S: Show your character's speed.
+    Alt-E: Show energy cost of last action.
+    Alt-G: Show the amount of gold you're carrying.
+    Alt-T: Show the number of game turns elapsed.
+    Alt-A: Show the amount of ammo equipped.
+
+ADOM Sage also adds additional functionality to a couple of ADOM's
+commands.  While selecting a location for a controlled teleport, if
+you press < or > (or whatever keys you have bound to the ascend/descend
+commands), ADOM Sage will move the cursor to the next visible staircase.
+
+
+Macros
+------
+A macro is a single, user-defined command that activates a series of
+commands.  ADOM Sage allows you to define up to 36 macros.
+
+To define a macro, edit sage.cfg and add lines similar to the following:
+
+    Macro_0 = a0
+    Macro_1 = :=Fast_Missile_Readying=false\Cm
+    Macro_2 = :=Fast_Missile_Readying=true\Cm
+
+Each line tells ADOM Sage what keys to send to ADOM when a macro is
+activated.  Macro 0, when activated, will apply whatever skill you have
+quick-marked as 0.  Macros 1 and 2 will change one of ADOM's configuration
+options.  The keys should be listed using the same format as is used in
+.adom.kbd; for example, the \Cm for macros 1 and 2 means Enter.
+
+Next you need to edit sage.kbd to tell what keys to press to activate
+a particular macro.  By default, macros 0 through 9 are activated by
+pressing Alt-0 through Alt-9; if you want to change this or use additional
+macros, you must edit sage.kbd.
+
+Macros can be activated any time the game is awaiting a command (this
+includes while looking, targeting, or selecting a location).  They cannot
+be activated in any of the game's various information screens.
+
+A coule of additional notes for defining macros:
+ * Macros cannot call other macros.  If a macro somehow managed to call
+   itself, that would lock up the game.
+ * ADOM's (more) prompt will automatically be skipped while running a
+   macro, so you don't need to worry about the (more) prompt.
+
+
+Graphics
+--------
+ADOM Sage allows the use of dot-, line-, and block-drawing characters
+in place of the standard ., #, -, | characters.  You'll have to use a
+font and terminal setup that supports the necessary characters, though.
+The console, for example, does not support the dot characters used by
+ADOM Sage, although it works fine with lines and blocks.  Some fonts
+under X-Windows support the needed characters, and some do not; you'll
+have to play around to find out what works on your system.  I've had
+good luck with the fixed (misc) font under gnome-terminal on my RedHat
+7.2 box; your mileage may vary.  Please let me know if you find a setup
+that works well for a particular Linux distribution.
+
+If you don't want to mess with all of this and want to go back to the
+standard characters, edit ~/.adom.data/sage.cfg and set the three
+Draw_ options to false.
+
+
+Mouse Support
+-------------
+Mouse support is currently enabled only while naming, selecting a
+destination for a controlled teleport, or targeting a missile weapon,
+improved fireball, or greater telekinetic blast.  Left-click to choose
+your target or destination.  Right-click to confirm your target or
+destination before left-clicking if you wish to do so.
+
+
+Known Bugs
+----------
+* The melee and missile weapon displays are messed up in character log
+  files under Windows.
+* ADOM Sage doesn't know whether or not ADOM is configured permit any
+  key at the '(more)' prompt when restoring or starting a new game.
+  Pressing Ctrl-K a couple of times after starting or restoring will
+  set it to behave correctly, or you can set the Fast_More variable in
+  ADOM Sage's config file.
+* ADOM Sage handles bad keymaps even worse than ADOM.  In particular, as
+  .adom.kbd warns, if any of the movement commands (MON MNW MOW MSW MOS
+  MSE MOE MNE WAT) are assigned to t, T, z, Z, \S, +, or -, bad things
+  will happen.
+* Cosmetic glitch: If Draw_Dots is enabled, dots are displayed instead
+  of periods for the 'Saving...' and 'Loading...' messages.
+* If you have large numbers of high-damage spells under ADOM 1.0.0,
+  the spell screen may not display correctly if your screen is less than
+  80 columns wide.
+
+
+Credits
+-------
+Thanks to Thomas Biskup for making such an excellent game.
+
+The Windows version of ADOM Sage uses PDCurses, a getopt library by
+Angus Mackay, and a tar program by T.V.Shaporev.  Thanks to the authors
+involved for making my life much easier.
+
+Thanks to Haxot for help with testing and advice.
+
+Thanks to Keeper for help in getting ADOM Sage to work with non-US keyboards.
+
+Thanks to Sam Blanning, Adom Biltcliffe, Eino Keskitalo, and Sobwom Joatamon
+for ideas and suggestions for features - several of ADOM Sage's features were
+shamelessly ripped off from features requested in their newsgroup posts
+and RFEs.
+
+Thanks to Rachel Walmsley, Keir Colbo, Mike Ehlers, Owen Brown, and Ian Tuomi
+for bug reports.
+
+On a more personal note, thanks to my wife for her love and support (and
+for allowing me the time to do this sort of thing).  Thanks to God for the
+ability to do this sort of thing.
+

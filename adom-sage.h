@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <cstring>
 
 #include "stl.h"
 
@@ -115,7 +116,7 @@ const int log_libcalls = 0x40;    /* Log most library calls */
 const int log_waddch = 0x80;      /* Log calls to waddch - very verbose */
 const int log_mouse = 0x100;      /* Log mouse activity */
 
-inline void log(int log_flag, char *str, ...)
+inline void log(int log_flag, const char * str, ...)
 {
 	if ((log_level & log_flag) && log_file) {
 		va_list ap;
@@ -126,7 +127,7 @@ inline void log(int log_flag, char *str, ...)
 	}
 }
 
-int sage_error(char *msg);
+int sage_error(const char *msg);
 	// Displays an error message, goes to passive mode, and returns 0
 
 
@@ -308,7 +309,7 @@ void fill_char (WINDOW *win, chtype ch, int y, int x, int len);
 bool find_ch(WINDOW *win, chtype ch, int &y, int &x);
 void move_cursor(WINDOW *win, int y, int x);
 
-typedef int MouseCookie;
+typedef mmask_t MouseCookie;
 MouseCookie mouse_enable();
 void mouse_restore(MouseCookie cookie);
 void get_mouse_event(int *y, int *x, int *button);

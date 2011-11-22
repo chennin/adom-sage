@@ -14,11 +14,14 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <string>
+#include <cstring>
+
+using namespace std;
 
 char *optarg;
 int optind, opterr, optopt;
 
-char *usage =
+const char *usage =
 "Usage: adom-sage [OPTION]... -- [PARAMETERS TO ADOM]...\n\
   -a  --adom-path=PATH  Path to adom binary.\n\
   -d  --debug-level=x   Debug level (a number).\n\
@@ -29,7 +32,7 @@ char *usage =
   -v, --version         Display version info.\n\
   --                    End of options to Sage; further options are for ADOM";
 
-char *version =
+const char *version =
 "ADOM Sage version 0.9.1 - frontend for ADOM\n\
 ADOM is (C) Copyright 1994-2002 Thomas Biskup.\n\
 ADOM Sage is Copyright (c) 2002 Joshua Kelley.";
@@ -245,7 +248,7 @@ int main (int argc, char *argv[])
 		}
 
 		// Try to determine ADOM's version while we're at it
-		char *version;
+		const char *version;
 		switch(buf.st_size) {
 			case 2388548: version = "100"; break;
 			case 2556118: version = "110"; break;

@@ -165,10 +165,10 @@ int get_key(WINDOW *win, int cursor_visibility, attr_t cursor_attr,
 		queue->pop_front();
 		no_wrefresh = config->quiet_macros && !queue->empty();
 	} else {
-		int y, x, old_visibility;
-		chtype ch;
-		attr_t attrs;
-		short pair;
+		int y = 0, x = 0, old_visibility = 0;
+		chtype ch = 0;
+		attr_t attrs = 0;
+		short pair = 0;
 
 		// Handle cursor - redraw or hide if desired.
 		if (cursor_visibility != 1) {
@@ -308,7 +308,7 @@ void move_cursor(WINDOW *win, int y, int x)
 MouseCookie mouse_enable(void)
 {
 	MouseCookie result;
-	mousemask(ALL_MOUSE_EVENTS, (mmask_t*) &result);
+	mousemask(ALL_MOUSE_EVENTS, &result);
 	return result;
 }
 

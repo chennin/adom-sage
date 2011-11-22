@@ -80,7 +80,7 @@ UNLINK    real_unlink;
 /* Linux-specific initialization; Windows-specific stuff is at end of file */
 void load_dynamic_libraries()
 {
-	char *libc_path, *curses_path;
+	const char *libc_path, *curses_path;
 	void *handle;
 
 	// Locate libraries to use
@@ -139,7 +139,7 @@ void initialize()
 	if (debug_flags)
 		sscanf(debug_flags, "%i", &log_level);
 	if (log_level) {
-		char *log_path = getenv("SAGE_LOGFILE");
+		const char *log_path = getenv("SAGE_LOGFILE");
 		if (log_path == NULL)
 			log_path = LOG_PATH;
 		log_file = fopen(log_path, "w");

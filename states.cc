@@ -175,7 +175,7 @@ int StateWeaponStats::sprintf(char *str, const char *format, va_list ap)
 
 int StateWeaponStats::vsprintf(char *str, const char *format, va_list ap)
 {
-	char *fraction_format = "\x03\xC6)/\x03\xCE%d";
+	const char *fraction_format = "\x03\xC6)/\x03\xCE%d";
 	if (strcmp(format, fraction_format) == 0) {
 		fraction = va_arg(ap, int);
 		return real_sprintf(str, format, fraction);

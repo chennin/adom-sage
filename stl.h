@@ -10,10 +10,13 @@
 
 #include <vector>
 #include <string>
-#include <hash_map>
+#include <ext/hash_map>
 #include <list>
 #include <map>
 #include <deque>
+
+using namespace std;
+using namespace __gnu_cxx;
 
 
 /*---------------------------------------------------------------------------

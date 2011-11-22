@@ -321,7 +321,6 @@ int StateCastSpell::vsprintf(char *str, const char *format, va_list ap)
 	else if (strcmp(format, "\x01%s\x03\xC6%c - %s\x01\n") == 0) {
 
 		// Get arguments
-		char *padding = va_arg(ap_copy, char *);
 		char spell_letter = va_arg(ap_copy, int);
 		char *spell_details = va_arg(ap_copy, char*);
 

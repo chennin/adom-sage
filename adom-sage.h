@@ -8,7 +8,6 @@
 
 #include <stdio.h>
 #include <stdarg.h>
-#include <cstring>
 
 #include "stl.h"
 
@@ -116,19 +115,21 @@ const int log_libcalls = 0x40;    /* Log most library calls */
 const int log_waddch = 0x80;      /* Log calls to waddch - very verbose */
 const int log_mouse = 0x100;      /* Log mouse activity */
 
-inline void log(int log_flag, const char * str, ...)
+inline void log(int log_flag, const char *str, ...)
 {
-	if ((log_level & log_flag) && log_file) {
-		va_list ap;
-		va_start(ap, str);
-		vfprintf(log_file, str, ap);
-		fflush(log_file);
-		va_end(ap);
-	}
+    if ((log_level & log_flag) && log_file)
+    {
+        va_list ap;
+
+        va_start(ap, str);
+        vfprintf(log_file, str, ap);
+        fflush(log_file);
+        va_end(ap);
+    }
 }
 
 int sage_error(const char *msg);
-	// Displays an error message, goes to passive mode, and returns 0
+// Displays an error message, goes to passive mode, and returns 0
 
 
 /*-----------------------------------------------------------------------------
@@ -137,65 +138,66 @@ int sage_error(const char *msg);
 
 extern int adom_version;
 
-struct Config {
+struct Config
+{
+    // Options affecting program operation
+    int passive;             // Run passively - just watch
 
-	// Options affecting program operation
-	int passive;             // Run passively - just watch
+    // Added features
+    int auto_swap_neutral;   // Automatically swap places with neutral monsters
+    int fast_selling;        // Remove unnecessary messages while selling
+    int mindcraft_stats;     // Show mindcraft damage, etc.
+    int more_weapon_stats;   // Augment weapon stats display
+    int short_alchemy;       // Shorten alchemy display
+    int short_named_monsters;// Shorten named monsters' titles
+    int spell_stats;         // Show spell range, duration, etc.
+    int suppress_toef;       // Suppress redundant ToEF messages
 
-	// Added features
-	int auto_swap_neutral;   // Automatically swap places with neutral monsters
-	int fast_selling;        // Remove unnecessary messages while selling
-	int mindcraft_stats;     // Show mindcraft damage, etc.
-	int more_weapon_stats;   // Augment weapon stats display
-	int short_alchemy;       // Shorten alchemy display
-	int short_named_monsters;// Shorten named monsters' titles
-	int spell_stats;         // Show spell range, duration, etc.
-	int suppress_toef;       // Suppress redundant ToEF messages
+    // Bugfix features
+    int fix_typos;           // Miscellaneous bugfixes, typo corrections, ...
+    int fix_flgs;            // Fix flgs under ADOM 1.1.0
 
-	// Bugfix features
-	int fix_typos;           // Miscellaneous bugfixes, typo corrections, ...
-	int fix_flgs;            // Fix flgs under ADOM 1.1.0
+    // I/O options
+    int cursor_visibility;   // Cursor visibility
+    int cursor_attr;         // Attribute to use in place of normal cursor
+    int draw_blocks;         // Use linedrawing characters for blocks
+    int draw_lines;          // Use linedrawing characters for lines
+    int draw_dots;           // Use linedrawing characters for dots
+    int mouse;               // Enable mouse support
 
-	// I/O options
-	int cursor_visibility;   // Cursor visibility
-	int cursor_attr;         // Attribute to use in place of normal cursor
-	int draw_blocks;         // Use linedrawing characters for blocks
-	int draw_lines;          // Use linedrawing characters for lines
-	int draw_dots;           // Use linedrawing characters for dots
-	int mouse;               // Enable mouse support
+    // In-game options
+    int fast_more;           // Accept any character for (more) prompt
 
-	// In-game options
-	int fast_more;           // Accept any character for (more) prompt
+    // Sage options
+    int quiet_macros;        // Disable screen updates while running macros
 
-	// Sage options
-	int quiet_macros;        // Disable screen updates while running macros
-
-	// Macros
-	char *macro[numMacros];
+    // Macros
+    char *macro[numMacros];
 };
 
 typedef void (*MsgHandler)(StateCmdProcessor *state, void *data, char *str,
-		const char *format, va_list ap);
+                           const char *format, va_list ap);
 
-struct MsgInfo {
-	// Constructors: just copy a bunch of variables
-	MsgInfo(MsgHandler new_handler, void *new_handler_data)
-		: handler(new_handler), handler_data(new_handler_data),
-		  no_skip(0), attr(A_NORMAL), color(COLOR_WHITE), subst(NULL) {};
-	MsgInfo(int new_no_skip, attr_t new_attr, short new_color, const char *new_subst)
-		: handler(NULL), handler_data(NULL), no_skip(new_no_skip),
-		  attr(new_attr), color(new_color), subst(new_subst) {};
-	MsgInfo(const char *new_subst)
-		: handler(NULL), handler_data(NULL), no_skip(0), attr(A_NORMAL),
-		  color(COLOR_WHITE), subst(new_subst) {};
+struct MsgInfo
+{
+    // Constructors: just copy a bunch of variables
+    MsgInfo(MsgHandler new_handler, void *new_handler_data)
+        : handler(new_handler), handler_data(new_handler_data),
+          no_skip(0), attr(A_NORMAL), color(COLOR_WHITE), subst(NULL) {};
+    MsgInfo(int new_no_skip, attr_t new_attr, short new_color, const char *new_subst)
+        : handler(NULL), handler_data(NULL), no_skip(new_no_skip),
+          attr(new_attr), color(new_color), subst(new_subst) {};
+    MsgInfo(const char *new_subst)
+        : handler(NULL), handler_data(NULL), no_skip(0), attr(A_NORMAL),
+          color(COLOR_WHITE), subst(new_subst) {};
 
-	// Member variables
-	MsgHandler handler;
-	void *handler_data;
-	int no_skip;
-	attr_t attr;
-	short color;
-	const char *subst;
+    // Member variables
+    MsgHandler handler;
+    void *handler_data;
+    int no_skip;
+    attr_t attr;
+    short color;
+    const char *subst;
 };
 
 extern char *cwd_path;
@@ -216,7 +218,7 @@ int read_msg_maps(void);
  * Commands
  */
 
-typedef map<const char*, int, ltstr> KeyMap;
+typedef map<const char *, int, ltstr> KeyMap;
 
 extern KeyMap *main_keymap;   // Key map for normal operation
 extern KeyMap *look_keymap;   // For 'l'ook command
@@ -228,27 +230,44 @@ extern int **reverse_keymap; // Maps commands to key sequences
 int read_keymaps(void);
 const char *ch_to_cmdstring(int ch);
 int *cmdstring_to_ch(const char *cmdstring);
-Command lookup_command(string& cmd, KeyMap *keymap);
+Command lookup_command(string &cmd, KeyMap *keymap);
 
 /* Key queue */
-class KeyQueue {
-public:
-	KeyQueue();
-	bool empty() const { return v.empty(); };
-	size_t size() const { return v.size(); };
-	void clear() { v.clear(); };
-	int front() { return v[i]; };
-	void pop_front();
-	void push_back(int ch) { v.push_back(ch); };
-	void push_cmd(Command cmd);
-	void push_string(const char *str);
-	void push_queue(KeyQueue &q);
-protected:
-	vector<int> v;
-	size_t i;
+class KeyQueue
+{
+    public:
+        KeyQueue();
+        bool empty() const
+        {
+            return v.empty();
+        };
+        size_t size() const
+        {
+            return v.size();
+        };
+        void clear()
+        {
+            v.clear();
+        };
+        int front()
+        {
+            return v[i];
+        };
+        void pop_front();
+        void push_back(int ch)
+        {
+            v.push_back(ch);
+        };
+        void push_cmd(Command cmd);
+        void push_string(const char *str);
+        void push_queue(KeyQueue &q);
+    protected:
+        vector<int> v;
+        size_t i;
 };
+
 extern KeyQueue *key_queue, *macro_queue, *current_input, *current_keys,
-	*prev_keys;
+       *prev_keys;
 // key_queue is global input queue (input may come from mouse, features, etc.)
 // macro_queue is input queue just for macros (since parts of macro may need
 //   to append stuff to key_queue)
@@ -264,11 +283,12 @@ extern KeyQueue *key_queue, *macro_queue, *current_input, *current_keys,
  * Game status
  */
 
-struct GameStatus {
-	char player_name[20];
-	Location loc;
-	int player_attr[numAttrs];
-	int player_level;
+struct GameStatus
+{
+    char player_name[20];
+    Location loc;
+    int player_attr[numAttrs];
+    int player_level;
 };
 
 extern GameStatus *game_status;
@@ -298,7 +318,7 @@ void init_io(void);
 int morewait (WINDOW *win, int skip_more);
 void show_msg (WINDOW *win, const char *msg);
 int get_key (WINDOW *win, int curs_visibility = 1, attr_t curs_attr = A_NORMAL,
-		bool allow_mouse = false);
+             bool allow_mouse = false);
 int get_string (WINDOW *win, char *str, int n);
 chtype convert_char(chtype ch);
 chtype reverse_convert_char(chtype ch);
@@ -331,8 +351,8 @@ extern int local_log_pos;
  * Online help and pager
  */
 /*
-void init_help();
-void show_manual(int section);
-void pager(const char *title, int linecount, const char * const line[],
-		int linelen[] = NULL, int start_line = 0);
-*/
+   void init_help();
+   void show_manual(int section);
+   void pager(const char *title, int linecount, const char * const line[],
+   int linelen[] = NULL, int start_line = 0);
+   */

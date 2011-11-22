@@ -1,7 +1,7 @@
 CC=/usr/bin/gcc
-CFLAGS=-shared -fPIC -Wall
+CFLAGS=-shared -fPIC -Wall -Wno-deprecated
 CXX=/usr/bin/g++
-CXXFLAGS=-shared -fPIC -Wall -O2
+CXXFLAGS=-shared -fPIC -Wall -O2 -Wno-deprecated
 LD=/usr/bin/ld
 
 OBJ = adom-sage.o library.o states.o command.o options.o io.o msg_handlers.o \
@@ -11,7 +11,7 @@ TARGET = adom-sage.so
 all: $(TARGET) adom-sage
 
 clean:
-	/bin/rm $(TARGET) $(OBJ) adom-sage config.h
+	/bin/rm -f $(TARGET) $(OBJ) adom-sage config.h
 
 adom-sage: sage-frontend.cc
 	$(CXX) -o adom-sage sage-frontend.cc -lncurses -g

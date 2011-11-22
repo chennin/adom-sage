@@ -237,7 +237,7 @@ int INTERCEPTOR(wclear) (WINDOW *win)
 {
     int result;
 
-    log(log_libcalls, "wclear %x\n", (ULONG_PTR) win);
+    log(log_libcalls, "wclear %x\n", (ULONG_PTR)(intptr_t) win);
 
     result = cur_state()->wclear(win);
     cleanup_states();
@@ -246,7 +246,7 @@ int INTERCEPTOR(wclear) (WINDOW *win)
 
 int INTERCEPTOR(wrefresh) (WINDOW *win)
 {
-    log(log_libcalls, "wrefresh %x\n", (ULONG_PTR) win);
+    log(log_libcalls, "wrefresh %x\n", (ULONG_PTR)(intptr_t) win);
 
     if (!no_wrefresh)
     {
@@ -268,7 +268,7 @@ int INTERCEPTOR(wmove) (WINDOW *win, int y, int x)
         return real_wmove(win, y, x);
     }
 
-    log(log_libcalls, "wmove %x %i %i\n", (ULONG_PTR) win, y, x);
+    log(log_libcalls, "wmove %x %i %i\n", (ULONG_PTR)(intptr_t) win, y, x);
 
     result = cur_state()->wmove(win, y, x);
     cleanup_states();
@@ -285,7 +285,7 @@ int INTERCEPTOR(waddch) (WINDOW *win, chtype ch)
     }
 
     log(log_libcalls, "waddch %x %i %c\n",
-        (ULONG_PTR) win, (int) ch, (char) ch);
+        (ULONG_PTR)(intptr_t) win, (int) ch, (char) ch);
 
     result = cur_state()->waddch(win, ch);
     cleanup_states();
@@ -302,7 +302,7 @@ int INTERCEPTOR(waddnstr) (WINDOW *win, const char *str, int n)
         return real_waddnstr(win, str, n);
     }
 
-    log(log_libcalls, "waddnstr %x %i %s\n", (ULONG_PTR) win, n, str);
+    log(log_libcalls, "waddnstr %x %i %s\n", (ULONG_PTR)(intptr_t) win, n, str);
 
     result = cur_state()->waddnstr(win, str, n);
     cleanup_states();
@@ -341,7 +341,7 @@ int INTERCEPTOR(wgetch) (WINDOW *win)
     }
 
     log(log_libcalls, "wgetch %x %i %s\n",
-        (ULONG_PTR) win, result, keyname(result));
+        (ULONG_PTR)(intptr_t) win, result, keyname(result));
 
     cleanup_states();
     return result;
@@ -356,7 +356,7 @@ int INTERCEPTOR(wgetnstr) (WINDOW *win, char *str, int n)
     result = cur_state()->wgetnstr(win, str, n);
     in_wgetnstr = 0;
 
-    log(log_libcalls, "wgetnstr %x %i %s\n", (ULONG_PTR) win, n, str);
+    log(log_libcalls, "wgetnstr %x %i %s\n", (ULONG_PTR)(intptr_t) win, n, str);
 
     cleanup_states();
     return result;

@@ -284,7 +284,8 @@ int StateCastSpell::vsprintf(char *str, const char *format, va_list ap)
 {
     char *spell_name;
     SpellMap::iterator iter;
-    va_list ap_copy = ap;
+    va_list ap_copy;
+    va_copy(ap_copy, ap);
 
     // Test if we can cast spells after all
     if ((strcmp(format, "Not while in the wilderness.") == 0) ||
@@ -321,9 +322,10 @@ int StateCastSpell::vsprintf(char *str, const char *format, va_list ap)
             current_spell = (Spell) iter->second;
         }
     }
+    va_end(ap_copy);
 
     // Spell castings and cost
-    else if (strcmp(format,
+    if (strcmp(format,
                     " \x03\xCE%5ld\x03\xC6, \x03\xCE%3d\x03\xC6pp ") == 0)
     {
         return real_vsprintf(str,
@@ -342,9 +344,11 @@ int StateCastSpell::vsprintf(char *str, const char *format, va_list ap)
     {
 
         // Get arguments
+        va_copy(ap_copy, ap);
         char *spell_details = va_arg(ap_copy, char *);
         char spell_letter = va_arg(ap_copy, int);
         spell_details = va_arg(ap_copy, char *);
+        va_end(ap_copy);
 
         // Extract spell name
         spell_name = strdup(spell_details);

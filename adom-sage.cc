@@ -428,7 +428,8 @@ int StateCmdProcessor::vsprintf(char *str, const char *format, va_list ap)
     }
 
     // Call message handler
-    handler_ap = subst_ap = ap;
+    va_copy(handler_ap, ap);
+    va_copy(subst_ap, ap);
     result = real_vsprintf(str, format, ap);
 
     // Generic handling for various messages - look up color to use
@@ -464,6 +465,8 @@ int StateCmdProcessor::vsprintf(char *str, const char *format, va_list ap)
             result = real_vsprintf(str, iter->second->subst, subst_ap);
         }
     }
+    va_end(subst_ap);
+    va_end(handler_ap);
 
     log(log_msgs, "Message out: %s\n", str);
 

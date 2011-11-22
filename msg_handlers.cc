@@ -106,8 +106,8 @@ MSG_HANDLER(memorial_handler)
 
 MSG_HANDLER(location_handler)
 {
-    log(log_game_status, "Game status: location %i\n", (int) data);
-    game_status->loc = (Location) (int) data;
+    log(log_game_status, "Game status: location %i\n", (int)(intptr_t) data);
+    game_status->loc = (Location) (int)(intptr_t) data;
 }
 
 const char *stat_msg =
@@ -181,7 +181,7 @@ MSG_HANDLER(resist_elem_handler)
     if (resisted)
     {
         if (config->suppress_toef && game_status->loc == locToEF
-            && ((int) data) == elemFire)
+            && ((int)(intptr_t) data) == elemFire)
         {
             strcpy(str, "");
         }

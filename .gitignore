@@ -1,0 +1,4 @@
+config.h
+adom-sage
+adom-sage.so
+*.o

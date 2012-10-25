@@ -497,8 +497,6 @@ int StateCmdProcessor::vsnprintf(char *str, size_t size, const char *format, va_
 	return StateCmdProcessor::vsnprintf(str, format, ap);
 }
 
-
-
 /*---------------------------------------------------------------------------
  * Running state
  * Running, accepting normal commands, doing normal messages, etc.

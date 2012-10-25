@@ -5,7 +5,7 @@ CXXFLAGS=-m32 -shared -fPIC -Wall -O2 -Wno-deprecated -g
 LD=/usr/bin/ld
 
 OBJ = adom-sage.o library.o states.o command.o options.o io.o msg_handlers.o \
-	spells.o #loader.o starsign.o roller.o item_list.o autosave.o
+	spells.o 
 TARGET = adom-sage.so
 
 all: $(TARGET) adom-sage

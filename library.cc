@@ -241,8 +241,7 @@ int INTERCEPTOR(wclear) (WINDOW *win)
 
     log(log_libcalls, "wclear %x\n", (ULONG_PTR)(intptr_t) win);
 
-    State *temp = cur_state();
-    result = temp->wclear(win);
+    result = cur_state()->wclear(win);
     cleanup_states();
     return result;
 }

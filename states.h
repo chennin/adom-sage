@@ -50,7 +50,6 @@ class State
         virtual int vsnprintf(char *str, size_t size, const char *format, va_list ap)
         {
 	    int i = real_vsnprintf(str, size, format, ap);
-//	    va_end(ap); //add_end
             return i;
         };
         virtual int unlink(const char *pathname)

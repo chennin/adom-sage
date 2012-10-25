@@ -131,7 +131,6 @@ inline void log(int log_flag, const char *str, ...)
         fflush(log_file);
         va_end(ap);
     }
-//    fflush(log_file);
 }
 
 int sage_error(const char *msg);

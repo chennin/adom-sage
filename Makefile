@@ -1,6 +1,6 @@
-CC=/usr/bin/gcc-4.6
+CC=/usr/bin/gcc
 CFLAGS=-m32 -shared -fPIC -Wall -Wno-deprecated -g
-CXX=/usr/bin/g++-4.6
+CXX=/usr/bin/g++
 CXXFLAGS=-m32 -shared -fPIC -Wall -O2 -Wno-deprecated -g
 LD=/usr/bin/ld
 

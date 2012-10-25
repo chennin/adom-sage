@@ -1,11 +1,11 @@
-CC=/usr/bin/gcc
-CFLAGS=-m32 -shared -fPIC -Wall -Wno-deprecated
-CXX=/usr/bin/g++
-CXXFLAGS=-m32 -shared -fPIC -Wall -O2 -Wno-deprecated
+CC=/usr/bin/gcc-4.6
+CFLAGS=-m32 -shared -fPIC -Wall -Wno-deprecated -g
+CXX=/usr/bin/g++-4.6
+CXXFLAGS=-m32 -shared -fPIC -Wall -O2 -Wno-deprecated -g
 LD=/usr/bin/ld
 
 OBJ = adom-sage.o library.o states.o command.o options.o io.o msg_handlers.o \
-	spells.o
+	spells.o #loader.o starsign.o roller.o item_list.o autosave.o
 TARGET = adom-sage.so
 
 all: $(TARGET) adom-sage
@@ -21,6 +21,7 @@ adom-sage: sage-frontend.cc
 # hopefully redundant.
 config.h: adom-sage
 	ldd adom-sage | perl -ne '($$lib, $$path) = (/^\s+(libncurses|libc).*=>\s+(\S+)/) and $$lib =~ tr/a-z/A-Z/ and print "#define $$lib \"$$path\"\n"' >config.h
+	echo '#define LIBNCURSES "/lib/i386-linux-gnu/libncurses.so.5"' >> config.h
 	@grep LIBNCURSES config.h > /dev/null || \
 		(echo Unable to find libncurses && exit 1)
 	@grep LIBC config.h > /dev/null || \

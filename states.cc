@@ -37,6 +37,17 @@ int StateFullScreen::wclear (WINDOW *win)
 
 int StateFullScreen::vsprintf (char *str, const char *format, va_list ap)
 {
+    process(format);
+    return real_vsprintf(str, format, ap);
+}
+
+int StateFullScreen::vsnprintf (char *str, size_t size, const char *format, va_list ap)
+{
+    process(format);
+    return real_vsnprintf(str, size, format, ap);
+}
+void StateFullScreen::process(const char *format)
+{
     // Special handling for certain full screens
     if (need_title)
     {
@@ -48,11 +59,7 @@ int StateFullScreen::vsprintf (char *str, const char *format, va_list ap)
 
         need_title = false;
     }
-
-    return real_vsprintf(str, format, ap);
 }
-
-
 /*---------------------------------------------------------------------------
  * Info screen state
  * Information screens, such as character background, required exp, etc.
@@ -94,15 +101,23 @@ int StateLevelUp::wclear (WINDOW *win)
 
 int StateLevelUp::vsprintf (char *str, const char *format, va_list ap)
 {
-    if (strcmp(format, "[Press SPACE to continue]") == 0)
-    {
-        done = true;
-    }
-
+    process(format);
     return real_vsprintf(str, format, ap);
 }
 
+int StateLevelUp::vsnprintf (char *str, size_t size, const char *format, va_list ap)
+{
+    process(format);
+    return real_vsnprintf(str, size, format, ap);
+}
 
+void StateLevelUp::process(const char *format)
+{
+    if (strcmp(format, "[Press SPACE to continue]") == 0)
+    {
+        done = true;
+    } 
+}
 /*---------------------------------------------------------------------------
  * Weapon stats state
  * Handles displaying stats for weapons, kicks, missiles
@@ -238,6 +253,11 @@ int StateWeaponStats::vsprintf(char *str, const char *format, va_list ap)
     }
 }
 
+int StateWeaponStats::vsnprintf(char *str, size_t size, const char *format, va_list ap)
+{
+	return StateWeaponStats::vsprintf(str, format, ap);
+}
+
 
 /*---------------------------------------------------------------------------
  * Extended drop state
@@ -315,17 +335,38 @@ int StateSwap::wgetch(WINDOW *win)
 
 int StateSwap::vsprintf(char *str, const char *fmt, va_list ap)
 {
+    if (process(str, fmt) == 0)
+    {
+       return 0;
+    }
+    else
+    {
+        return component->vsprintf(str, fmt, ap);
+    }
+}
+
+int StateSwap::vsnprintf(char *str, size_t size, const char *fmt, va_list ap)
+{
+    if (process(str, fmt) == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        return component->vsnprintf(str, size, fmt, ap);
+    }
+}
+
+int StateSwap::process(char *str, const char *fmt)
+{
     if (strcmp(fmt, "Which direction [%s, Z = ABORT]?") == 0)
     {
         key_queue->push_cmd(dir);
         strcpy(str, "");
         return 0;
     }
-
-    return component->vsprintf(str, fmt, ap);
+  return 1;
 }
-
-
 /*---------------------------------------------------------------------------
  * Alchemy state
  * Handles the recipes command
@@ -357,7 +398,10 @@ int StateAlchemy::waddch (WINDOW *win, chtype ch)
     just_cleared = 0;
     return real_waddch(win, convert_char(ch));
 }
-
+int StateAlchemy::vsnprintf(char *str, size_t size, const char *format, va_list ap)
+{
+	return StateAlchemy::vsprintf(str, format, ap);
+}
 int StateAlchemy::vsprintf (char *str, const char *format, va_list ap)
 {
     just_cleared = 0;
@@ -417,7 +461,10 @@ int StateDynamicDisplay::wgetch(WINDOW *win)
 
     return component->wgetch(win);
 }
-
+int StateDynamicDisplay::vsnprintf(char *str, size_t size, const char *format, va_list ap)
+{
+	return StateDynamicDisplay::vsprintf(str, format, ap);
+}
 int StateDynamicDisplay::vsprintf(char *str, const char *format, va_list ap)
 {
     int result;
@@ -513,8 +560,11 @@ int StateMindcraft::wclear (WINDOW *win)
     pop_state();
     return real_wclear(win);
 }
-
-int StateMindcraft::vsprintf (char *str, const char *format, va_list ap)
+int StateMindcraft::vsnprintf(char *str, size_t size, const char *format, va_list ap)
+{
+	return StateMindcraft::vsprintf(str, format, ap);
+}
+int StateMindcraft::vsprintf(char *str, const char *format, va_list ap)
 {
     if (!config->mindcraft_stats)
     {

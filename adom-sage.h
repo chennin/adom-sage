@@ -42,6 +42,7 @@ typedef int (*WGETCH)(WINDOW *win);
 typedef int (*WGETNSTR)(WINDOW *win, char *str, int n);
 typedef int (*SPRINTF)(char *str, const char *format, ...);
 typedef int (*VSPRINTF)(char *str, const char *format, va_list ap);
+typedef int (*VSNPRINTF)(char *str, size_t size, const char *format, va_list ap);
 typedef int (*UNLINK)(const char *pathname);
 
 // Linux - Pointers to real library functions
@@ -56,6 +57,7 @@ extern WGETCH    real_wgetch;
 extern WGETNSTR  real_wgetnstr;
 extern SPRINTF   real_sprintf;
 extern VSPRINTF  real_vsprintf;
+extern VSNPRINTF real_vsnprintf;
 extern UNLINK    real_unlink;
 
 // Linux - ADOM config directories
@@ -85,6 +87,7 @@ int libc_unlink(const char *pathname);
 #define real_wgetnstr ::wgetnstr
 #define real_sprintf ::sprintf
 #define real_vsprintf ::vsprintf
+#define real_vsnprintf ::vsnprintf
 #define real_unlink ::libc_unlink
 
 // Win32 - non-ANSI functions
@@ -117,6 +120,8 @@ const int log_mouse = 0x100;      /* Log mouse activity */
 
 inline void log(int log_flag, const char *str, ...)
 {
+
+//	printf("Logging: %s", str);
     if ((log_level & log_flag) && log_file)
     {
         va_list ap;
@@ -126,6 +131,7 @@ inline void log(int log_flag, const char *str, ...)
         fflush(log_file);
         va_end(ap);
     }
+//    fflush(log_file);
 }
 
 int sage_error(const char *msg);

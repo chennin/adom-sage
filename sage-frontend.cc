@@ -33,9 +33,10 @@ const char *usage =
     "  --                    End of options to Sage; further options are for ADOM";
 
 const char *version =
-    "ADOM Sage version 0.9.1 - frontend for ADOM\n"
+    "ADOM Sage version 0.9.1a - frontend for ADOM\n"
     "ADOM is (C) Copyright 1994-2002 Thomas Biskup.\n"
-    "ADOM Sage is Copyright (c) 2002 Joshua Kelley.";
+    "ADOM Sage is Copyright (c) 2002 Joshua Kelley.\n"
+    " and copyright Alucard 2012.\n";
 
 struct option longopts[] =
 {
@@ -344,6 +345,12 @@ int main (int argc, char *argv[])
             case 2452608:
                 version = "111";
                 break;
+	    case 2240572:
+		version = "1203"; // 32-bit debian
+		break;
+	    case 2246972:
+		version = "1204"; // 32-bit debian
+		break;
             default:
                 version = "0";
                 break;

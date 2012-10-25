@@ -50,6 +50,7 @@ WGETCH    real_wgetch;
 WGETNSTR  real_wgetnstr;
 SPRINTF   real_sprintf;
 VSPRINTF  real_vsprintf;
+VSNPRINTF real_vsnprintf;
 UNLINK    real_unlink;
 
 #define INTERCEPTOR(x) x
@@ -128,6 +129,7 @@ void load_dynamic_libraries()
 
     real_sprintf  = (SPRINTF)  dlsym(handle, "sprintf");
     real_vsprintf = (VSPRINTF) dlsym(handle, "vsprintf");
+    real_vsnprintf = (VSNPRINTF) dlsym(handle, "vsnprintf");
     real_unlink   = (UNLINK)   dlsym(handle, "unlink");
 
     // Don't reload Sage for any of our children (if we ever get children)
@@ -235,11 +237,12 @@ int INTERCEPTOR(init_pair) (short pair, short f, short b)
 
 int INTERCEPTOR(wclear) (WINDOW *win)
 {
-    int result;
+    int result = 0;
 
     log(log_libcalls, "wclear %x\n", (ULONG_PTR)(intptr_t) win);
 
-    result = cur_state()->wclear(win);
+    State *temp = cur_state();
+    result = temp->wclear(win);
     cleanup_states();
     return result;
 }
@@ -375,6 +378,7 @@ int INTERCEPTOR(sprintf) (char *str, const char *format, ...)
     return result;
 }
 
+// pre-1.2.0p4:
 int INTERCEPTOR(vsprintf) (char *str, const char *format, va_list ap)
 {
     initialize();
@@ -384,6 +388,17 @@ int INTERCEPTOR(vsprintf) (char *str, const char *format, va_list ap)
 
     return result;
 }
+
+// 1.2.0p4+
+int INTERCEPTOR(vsnprintf) (char *str, size_t size, const char *format, va_list ap)
+{
+    initialize();
+    int result = cur_state()->vsnprintf(str, size, format, ap);
+	
+    log(log_libcalls, "vsnprintf %s %s\n", str, format);
+
+    return result;
+} 
 
 int INTERCEPTOR(unlink) (const char *pathname)
 {
@@ -420,6 +435,7 @@ void sageSymbols()
     codesym("wgetnstr", sage_wgetnstr);
     codesym("sprintf", sage_sprintf);
     codesym("vsprintf", sage_vsprintf);
+    codesym("vsnprintf", sage_vsnprintf);
     codesym("unlink", sage_unlink);
 #ifdef _DEBUG
     codesym("__sysv_signal", sage_signal);

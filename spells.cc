@@ -279,7 +279,10 @@ int StateCastSpell::wgetch(WINDOW *win)
 
     return result;
 }
-
+int StateCastSpell::vsnprintf(char *str, size_t size, const char *format, va_list ap)
+{
+	StateCastSpell::vsprintf(str, format, ap);
+}
 int StateCastSpell::vsprintf(char *str, const char *format, va_list ap)
 {
     char *spell_name;
@@ -393,6 +396,7 @@ void StateCastSpell::print_spell_details(WINDOW *win, const char *label,
     real_waddnstr(win, label, -1);
     real_waddch(win, ' ');
     real_vsprintf(details, format, ap);
+//    real_vsnprintf(details, size, format, ap);
     attron(A_BOLD);
     real_waddnstr(win, details, -1);
     attroff(A_BOLD);

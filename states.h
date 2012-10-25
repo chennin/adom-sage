@@ -47,6 +47,12 @@ class State
         {
             return real_vsprintf(str, format, ap);
         };
+        virtual int vsnprintf(char *str, size_t size, const char *format, va_list ap)
+        {
+	    int i = real_vsnprintf(str, size, format, ap);
+//	    va_end(ap); //add_end
+            return i;
+        };
         virtual int unlink(const char *pathname)
         {
             return real_unlink(pathname);
@@ -89,6 +95,7 @@ class StateCmdProcessor : public State
         chtype winch(WINDOW *win);
         int wgetch(WINDOW *win);
         int vsprintf(char *str, const char *format, va_list ap);
+	int vsnprintf(char *str, size_t size, const char *format, va_list ap);
 
         void enable_mouse(Command btn1_cmd = cmdInvalid,
                           Command btn2_cmd = cmdInvalid,
@@ -160,6 +167,10 @@ class StateDecorator : public State
         int vsprintf(char *str, const char *format, va_list ap)
         {
             return component->vsprintf(str, format, ap);
+        };
+        int vsnprintf(char *str, size_t size, const char *format, va_list ap)
+        {
+            return component->vsnprintf(str, size, format, ap);
         };
     protected:
         StateCmdProcessor *component;
@@ -234,6 +245,8 @@ class StateFullScreen : public StateDrawable
         };
         int wclear(WINDOW *win);
         int vsprintf(char *str, const char *format, va_list ap);
+	int vsnprintf(char *str, size_t size, const char *format, va_list ap);
+	void process(const char *format);
     private:
         bool need_title;
 };
@@ -258,6 +271,8 @@ class StateLevelUp : public StateDrawable
         };
         int wclear(WINDOW *win);
         int vsprintf(char *str, const char *format, va_list ap);
+	int vsnprintf(char *str, size_t size, const char *format, va_list ap);
+	void process(const char *format);
     private:
         bool done;
 };
@@ -273,6 +288,8 @@ class StateWeaponStats : public State
         int wmove(WINDOW *win, int y, int x);
         int sprintf(char *str, const char *format, va_list ap);
         int vsprintf(char *str, const char *format, va_list ap);
+	int vsnprintf(char *str, size_t size, const char *format, va_list ap);
+	int process(char *str, const char *format, va_list ap);
     private:
         int dice, sides, plus, fraction;
 };
@@ -307,6 +324,8 @@ class StateSwap : public StateDecorator
         };
         int wgetch(WINDOW *win);
         int vsprintf(char *str, const char *fmt, va_list ap);
+	int vsnprintf(char *str, size_t size, const char *fmt, va_list ap);
+	int process(char *str, const char *fmt);
     private:
         Command dir;
         unsigned queue_size;
@@ -324,6 +343,7 @@ class StateAlchemy : public State
         int wmove(WINDOW *win, int y, int x);
         int waddch(WINDOW *win, chtype ch);
         int vsprintf(char *str, const char *format, va_list ap);
+	int vsnprintf(char *str, size_t size, const char *format, va_list ap);
     private:
         int just_cleared;
 };
@@ -339,6 +359,7 @@ class StateDynamicDisplay : public StateDecorator
         };
         int wgetch(WINDOW *win);
         int vsprintf(char *str, const char *format, va_list ap);
+	int vsnprintf(char *str, size_t size, const char *format, va_list ap);
     private:
         size_t queue_size;
         Command cmd_display;
@@ -356,6 +377,7 @@ class StateCastSpell : public State
         int waddnstr(WINDOW *win, const char *str, int n);
         int wgetch(WINDOW *win);
         int vsprintf(char *str, const char *format, va_list ap);
+	int vsnprintf(char *str, size_t size, const char *format, va_list ap);
     private:
         char max_letter;
         Spell current_spell;
@@ -372,6 +394,8 @@ class StateMindcraft : public StateDrawable
         };
         int wclear(WINDOW *win);
         int vsprintf(char *str, const char *format, va_list ap);
+	int vsnprintf(char *str, size_t size, const char *format, va_list ap); 
+//	int process(char *str, const char *format, va_list ap); 
 };
 
 class StateGameSummary : public StateDrawable

@@ -65,7 +65,8 @@ void init_game_status(void)
  */
 
 typedef vector<State *> StateStack;
-vector<State *> state_stack, cleanup_stack;
+vector<State *> state_stack;
+vector<State *> cleanup_stack;
 
 void push_state (State *state)
 {
@@ -82,7 +83,8 @@ void pop_state(void)
 
 State *cur_state(void)
 {
-    return state_stack.back();
+    State *t2 = state_stack.back();
+    return t2;
 }
 
 void cleanup_states(void)
@@ -431,6 +433,97 @@ int StateCmdProcessor::vsprintf(char *str, const char *format, va_list ap)
     va_copy(handler_ap, ap);
     va_copy(subst_ap, ap);
     result = real_vsprintf(str, format, ap);
+
+    // Generic handling for various messages - look up color to use
+    iter = msgmap->find(format);
+
+    if (iter == msgmap->end())
+    {
+        iter = msgmap->find(str);
+    }
+
+    if (iter != msgmap->end())
+    {
+        if (iter->second->color != COLOR_WHITE ||
+            iter->second->attr != A_NORMAL)
+        {
+            msg_color = iter->second->color;
+            msg_attr = iter->second->attr;
+        }
+
+        if (iter->second->no_skip)
+        {
+            skip_more = 0;
+        }
+
+        if (iter->second->handler)
+        {
+            (*iter->second->handler)
+            (this, iter->second->handler_data, str, format, handler_ap);
+        }
+
+        if (iter->second->subst)
+        {
+            result = real_vsprintf(str, iter->second->subst, subst_ap);
+        }
+    }
+    va_end(subst_ap);
+    va_end(handler_ap);
+
+    log(log_msgs, "Message out: %s\n", str);
+
+    // Hack - shorten named monsters if desired
+    if (config->short_named_monsters &&
+        strcmp(format, "This is %s. %s %s.") != 0 &&
+        strcmp(format, "This is %s%s. %s %s.") != 0 &&
+        strcmp(format, "was killed %sby %s") != 0)
+    {
+        char *start, *stop;
+
+        while ((stop = strchr(str, '~')) != NULL)
+        {
+            for (start = stop; start > str && *start != ','; start--)
+            {
+                ;
+            }
+
+            memmove(start, stop + 1, strlen(str) - (stop - str));
+        }
+    }
+
+    return result;
+}
+
+int StateCmdProcessor::vsnprintf(char *str, size_t size, const char *format, va_list ap)
+{
+    int result;
+    MsgMap::const_iterator iter;
+    va_list handler_ap, subst_ap;
+
+    if (reset_colors)
+    {
+        log(log_msgs, "New message\n", format);
+        msg_color = COLOR_WHITE;
+        msg_attr = A_NORMAL;
+        reset_colors = 0;
+    }
+
+    log(log_msgs, "Message  in: %s\n", format);
+
+    if (skip_next_msg)  // Should be moved earlier in func?
+    {
+        log(log_msgs, "Message skipped\n");
+        skip_next_msg--;
+        str[0] = '\0';
+
+        return 0;
+    }
+
+    // Call message handler
+    va_copy(handler_ap, ap);
+    va_copy(subst_ap, ap);
+    result = real_vsnprintf(str, size, format, ap);
+//    va_end(ap); // add_end
 
     // Generic handling for various messages - look up color to use
     iter = msgmap->find(format);

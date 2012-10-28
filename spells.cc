@@ -281,7 +281,7 @@ int StateCastSpell::wgetch(WINDOW *win)
 }
 int StateCastSpell::vsnprintf(char *str, size_t size, const char *format, va_list ap)
 {
-	StateCastSpell::vsprintf(str, format, ap);
+    return StateCastSpell::vsprintf(str, format, ap);
 }
 int StateCastSpell::vsprintf(char *str, const char *format, va_list ap)
 {

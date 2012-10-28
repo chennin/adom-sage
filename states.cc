@@ -230,6 +230,15 @@ int StateWeaponStats::sprintf(char *str, const char *format, va_list ap)
 
 int StateWeaponStats::vsprintf(char *str, const char *format, va_list ap)
 {
+	int ret = process(str, format, ap);
+	if (ret == -200)
+	{
+		return real_vsprintf(str, format, ap);
+	}
+	return ret;
+}
+int StateWeaponStats::process(char *str, const char *format, va_list ap)
+{
     const char *fraction_format = "\x03\xC6)/\x03\xCE%d";
     const char *hand_dice_format = "1d%d";
 
@@ -249,13 +258,18 @@ int StateWeaponStats::vsprintf(char *str, const char *format, va_list ap)
 
     else
     {
-        return real_vsprintf(str, format, ap);
+        return -200;
     }
 }
 
 int StateWeaponStats::vsnprintf(char *str, size_t size, const char *format, va_list ap)
 {
-	return StateWeaponStats::vsprintf(str, format, ap);
+	int ret = process(str, format, ap);
+	if (ret == -200) 
+	{
+		return real_vsnprintf(str, size, format, ap);
+	}
+	return ret;
 }
 
 

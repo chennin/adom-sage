@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ncurses.h>
 
 #include <vector>
 
@@ -494,7 +495,7 @@ int StateCmdProcessor::vsprintf(char *str, const char *format, va_list ap)
 
 int StateCmdProcessor::vsnprintf(char *str, size_t size, const char *format, va_list ap)
 {
-	return StateCmdProcessor::vsnprintf(str, format, ap);
+	return StateCmdProcessor::vsprintf(str, format, ap);
 }
 
 /*---------------------------------------------------------------------------

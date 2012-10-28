@@ -19,9 +19,10 @@ adom-sage: sage-frontend.cc
 # HACK: Gratuitously link ncurses to adom-sage, then run ldd on adom-sage to
 # find its path.  Adom-sage will try running ldd on adom, so this code is
 # hopefully redundant.
+# Newer Ubuntu refuses to link adom-sage with libncurses.
+# In this version, assume that ncurses is in the same directory as libc.
 config.h: adom-sage
-	ldd adom-sage | perl -ne '($$lib, $$path) = (/^\s+(libncurses|libc).*=>\s+(\S+)/) and $$lib =~ tr/a-z/A-Z/ and print "#define $$lib \"$$path\"\n"' >config.h
-	echo '#define LIBNCURSES "/lib/i386-linux-gnu/libncurses.so.5"' >> config.h
+	ldd adom-sage | perl -ne '$$_ = (/^\s+libc.*=>\s+(\S+)\//) and $$path = $$1 and print "#define LIBC \"$$path/libc.so.6\"\n#define LIBNCURSES \"$$path/libncurses.so.5\"\n"' >config.h
 	@grep LIBNCURSES config.h > /dev/null || \
 		(echo Unable to find libncurses && exit 1)
 	@grep LIBC config.h > /dev/null || \

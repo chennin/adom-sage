@@ -412,24 +412,24 @@ int StateAlchemy::waddch (WINDOW *win, chtype ch)
     just_cleared = 0;
     return real_waddch(win, convert_char(ch));
 }
-int StateAlchemy::vsnprintf(char *str, size_t size, const char *format, va_list ap)
+int StateAlchemy::vsprintf(char *str, const char *format, va_list ap)
 {
-	return StateAlchemy::vsprintf(str, format, ap);
+	return StateAlchemy::vsnprintf(str, 65535, format, ap);
 }
-int StateAlchemy::vsprintf (char *str, const char *format, va_list ap)
+int StateAlchemy::vsnprintf (char *str, size_t size, const char *format, va_list ap)
 {
     just_cleared = 0;
 
     if (strcmp(format, "don't know any recipes yet.") == 0)
     {
         pop_state();
-        return real_vsprintf(str, format, ap);
+        return real_vsnprintf(str, size, format, ap);
     }
 
     else if (config->short_alchemy
              && strcmp(format, "\x03\xC6Recipe #\x03\xCE%d\x03\xC6:") == 0)
     {
-        return real_vsprintf(str, "\x03\xC6#\x03\xCE%2d\x03\xC6:", ap);
+        return real_vsnprintf(str, size,  "\x03\xC6#\x03\xCE%2d\x03\xC6:", ap);
     }
 
     else if (config->short_alchemy
@@ -447,7 +447,7 @@ int StateAlchemy::vsprintf (char *str, const char *format, va_list ap)
 
     else
     {
-        return real_vsprintf(str, format, ap);
+        return real_vsnprintf(str, size, format, ap);
     }
 }
 

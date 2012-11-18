@@ -1,11 +1,11 @@
 CC=/usr/bin/gcc
-CFLAGS=-m32 -shared -fPIC -Wall -Wno-deprecated -g
+CFLAGS=-m32 -shared -fPIC -Wall -O2 -Wno-deprecated -g
 CXX=/usr/bin/g++
-CXXFLAGS=-m32 -shared -fPIC -Wall -O2 -Wno-deprecated -g
+CXXFLAGS=-m32 -shared -fPIC -Wall -O2 -Wno-deprecated -g 
 LD=/usr/bin/ld
 
 OBJ = adom-sage.o library.o states.o command.o options.o io.o msg_handlers.o \
-	spells.o 
+	spells.o loader.o starsign.o
 TARGET = adom-sage.so
 
 all: $(TARGET) adom-sage
@@ -29,7 +29,7 @@ config.h: adom-sage
 		(echo Unable to find libc && exit 1)
 
 adom-sage.so: $(OBJ)
-	$(CXX) -m32 -shared -o adom-sage.so $(OBJ) -ldl
+	$(CXX) -m32 -shared -o adom-sage.so $(OBJ) -ldl -O2
 #	$(CXX) -Wl,-Bshareable -shared -fPIC -o adom-sage.so $(OBJ) -ldl
 
 library.o : library.cc config.h

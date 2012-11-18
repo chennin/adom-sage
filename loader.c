@@ -29,6 +29,8 @@ void my_load(void) {
 		sscanf(version, "%i", &adom_version);
 	}
 
+	// See http://www.adom.de/forums/showthread.php/1134-Choosing-star-sign?p=72882#post72882
+	// for information on finding these offsets
 	if (adom_version == 111) {
 		INJECT_STARSIGN = 0x813ee0a; 
 	}

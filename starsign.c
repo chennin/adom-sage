@@ -14,6 +14,16 @@ void starsign_select() {
 		sscanf(version, "%i", &adom_version);
 	}
 
+
+	/*
+	BIRTHSIGN_ADDR is the place in memory where the day of birth is stored.
+	Its value in memory will be the in-game displayed value minus one.
+
+	JUMP_TO is where to resume execution in the ADOM executable.
+
+         See http://www.adom.de/forums/showthread.php/1134-Choosing-star-sign?p=72882#post72882
+         for information on finding these offsets.
+	*/
 	if (adom_version == 111) {
 		BIRTHSIGN_ADDR = 0x82b61f0;
 		JUMP_TO = 0x813ee80;

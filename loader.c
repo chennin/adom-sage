@@ -17,7 +17,7 @@ pid_t try_fork() {
 
 // Called when the library is loaded and before dlopen() returns
 void my_load(void) {
-	int INJECT_STARSIGN = 0, STAROFF = 0;
+	uint32_t INJECT_STARSIGN = 0, STAROFF = 0;
 //	int INJECT_STAT = 0, STATOFF = 0;
 
 	// Get ADOM version number, set by Sage
@@ -29,8 +29,11 @@ void my_load(void) {
 		sscanf(version, "%i", &adom_version);
 	}
 
-	// See http://www.adom.de/forums/showthread.php/1134-Choosing-star-sign?p=72882#post72882
-	// for information on finding these offsets
+	/*
+	INJECT_* is the address in memory to overwrite with the location of our function.
+	 See http://www.adom.de/forums/showthread.php/1134-Choosing-star-sign?p=72882#post72882
+	 for information on finding these offsets.
+	*/
 	if (adom_version == 111) {
 		INJECT_STARSIGN = 0x813ee0a; 
 	}

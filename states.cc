@@ -475,15 +475,15 @@ int StateDynamicDisplay::wgetch(WINDOW *win)
 
     return component->wgetch(win);
 }
-int StateDynamicDisplay::vsnprintf(char *str, size_t size, const char *format, va_list ap)
-{
-	return StateDynamicDisplay::vsprintf(str, format, ap);
-}
 int StateDynamicDisplay::vsprintf(char *str, const char *format, va_list ap)
+{
+	return StateDynamicDisplay::vsnprintf(str, 65535, format, ap);
+}
+int StateDynamicDisplay::vsnprintf(char *str, size_t size, const char *format, va_list ap)
 {
     int result;
     const char *dyn_display_msg = "[The dynamic display now shows the";
-    result = component->vsprintf(str, format, ap);
+    result = component->vsnprintf(str, size, format, ap);
 
     if (strcmp(format, dyn_display_msg) == 0)
     {
@@ -574,15 +574,15 @@ int StateMindcraft::wclear (WINDOW *win)
     pop_state();
     return real_wclear(win);
 }
-int StateMindcraft::vsnprintf(char *str, size_t size, const char *format, va_list ap)
-{
-	return StateMindcraft::vsprintf(str, format, ap);
-}
 int StateMindcraft::vsprintf(char *str, const char *format, va_list ap)
+{
+	return StateMindcraft::vsnprintf(str, 65535, format, ap);
+}
+int StateMindcraft::vsnprintf(char *str, size_t size, const char *format, va_list ap)
 {
     if (!config->mindcraft_stats)
     {
-        int result = real_vsprintf(str, format, ap);
+        int result = real_vsnprintf(str, size, format, ap);
         char *s;
 
         if (config->fix_typos && (s = strstr(str, "Eyes of the mind")))
@@ -725,7 +725,7 @@ int StateMindcraft::vsprintf(char *str, const char *format, va_list ap)
 
     else
     {
-        return real_vsprintf(str, format, ap);
+        return real_vsnprintf(str, size, format, ap);
     }
 }
 

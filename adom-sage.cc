@@ -220,7 +220,7 @@ int StateCmdProcessor::wmove(WINDOW *win, int y, int x)
 
 int StateCmdProcessor::waddch(WINDOW *win, chtype ch)
 {
-    if (just_cleared && (ch == '-' || ch == '#'))
+    if (just_cleared && (ch == '-' || ch == '#' || ch == 10)) // 10 == LF
     {
         push_state(new StateFullScreen);
     }
@@ -234,7 +234,7 @@ int StateCmdProcessor::waddnstr(WINDOW *win, const char *str, int n)
     short old_color;
     int result;
 
-    just_cleared = 0;
+    //just_cleared = 0; // fix 'freeze' on skillup after 50
     reset_colors = 1;  // Reset colors at next vsprintf
 
     // Make note of player's name

@@ -344,15 +344,12 @@ int main (int argc, char *argv[])
             case 2452608:
                 version = "111";
                 break;
-	    case 2335684: // 32-bit Ubuntu
 	    case 2240572: // 32-bit Debian
 		version = "1203"; 
 		break;
-	    case 2348004: // 32-bit Ubuntu
 	    case 2246972: // 32-bit Debian
 		version = "1204"; 
 		break;
-	    case 2352100: // 32-bit Ubuntu
             case 2250044: // 32-bit Debian
                 version = "1205"; 
                 break;

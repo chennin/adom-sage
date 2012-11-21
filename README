@@ -43,6 +43,8 @@ Quick Start (Linux)
 ------------------
 If you downloaded the source package, run make.
 Compiling requires 32-bit ncurses development files (eg lib32ncurses5-dev)
+The star sign selector in 1.2.0+ is only supported with the 32-bit Debian 
+versions
 Copy adom-sage and adom-sage.so to the same directory as adom.
 Whenever you wish to play ADOM, run adom-sage instead of adom.
 If your screen looks ugly, please see the section on Graphics.

@@ -42,6 +42,7 @@ Please do not send RFEs (requests for enhancement) to Thomas based off
 Quick Start (Linux)
 ------------------
 If you downloaded the source package, run make.
+Compiling requires 32-bit ncurses development files (eg lib32ncurses5-dev)
 Copy adom-sage and adom-sage.so to the same directory as adom.
 Whenever you wish to play ADOM, run adom-sage instead of adom.
 If your screen looks ugly, please see the section on Graphics.

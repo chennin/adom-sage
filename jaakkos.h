@@ -13,7 +13,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <string.h>
-#include <unistd.h>
 #include <time.h>
 #include <stdint.h>
 #include <ctype.h>

@@ -50,7 +50,7 @@ void my_load(void) {
                 INJECT_STARSIGN =  0x0813a94a;
         }
 	else if (adom_version == 1206) {
-                INJECT_STARSIGN =  0x0813c059;
+                INJECT_STARSIGN =  0x0813c05a;
         }
 	if (INJECT_STARSIGN == 0) {
 		printf("Don't know where to inject a function to.  Unknown ADOM version %i ?\n", adom_version);

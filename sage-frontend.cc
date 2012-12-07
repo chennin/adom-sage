@@ -35,7 +35,7 @@ const char *usage =
 const char *version =
     "ADOM Sage version 0.9.3 - frontend for ADOM\n"
     "ADOM is (C) Copyright 1994-2012 Thomas Biskup.\n"
-    "ADOM Sage is Copyright (c) 2002 Joshua Kelley.\n";
+    "ADOM Sage is Copyright (c) 2002 Joshua Kelley.\n"
     "ADOM Sage is Copyright (c) 2012 Christopher Henning.\n";
 
 struct option longopts[] =
@@ -324,9 +324,8 @@ int main (int argc, char *argv[])
         // Check if ADOM is setuid; warn if it is
         if (buf.st_mode & (S_ISUID | S_ISGID))
         {
-            printf("WARNING: ADOM is installed setuid or setgid, so ADOM Sage\n");
-            printf("probably won't work.  See http://www.jbc.edu/~josh/adom-sage/setuid.html\n");
-            printf("for details.\n\n");
+            printf(":ARNING: ADOM is installed setuid or setgid, so ADOM Sage\n");
+            printf("probably won't work.\n\n");
             printf("[PRESS ENTER TO CONTINUE]");
             getchar();
         }

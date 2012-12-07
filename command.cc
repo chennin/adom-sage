@@ -416,11 +416,13 @@ int read_keymaps (void)
 
     if (adommap == NULL)
     {
-        printf("Unable to read ADOM's settings.  This is apparently the first\n"
-               "time that you have run ADOM.  After ADOM displays its\n"
-               "welcome screen, please exit the game and rerun it so that\n"
-               "ADOM Sage can properly initialize.\n");
+        printf("\nWARNING:\n"
+               "Unable to read ADOM's settings.  This is apparently the first time that you\n"
+               "have run ADOM.  After ADOM displays its welcome screen, please exit the game\n"
+               "and rerun it so that ADOM Sage can properly initialize.\n\n"
+	       "Sage is now entering PASSIVE MODE.\n\n");
         printf("\n[PRESS ENTER TO CONTINUE]\n");
+	config->passive = 1;
         getchar();
         return 0;
     }

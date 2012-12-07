@@ -324,7 +324,7 @@ int main (int argc, char *argv[])
         // Check if ADOM is setuid; warn if it is
         if (buf.st_mode & (S_ISUID | S_ISGID))
         {
-            printf(":ARNING: ADOM is installed setuid or setgid, so ADOM Sage\n");
+            printf("WARNING: ADOM is installed setuid or setgid, so ADOM Sage\n");
             printf("probably won't work.\n\n");
             printf("[PRESS ENTER TO CONTINUE]");
             getchar();

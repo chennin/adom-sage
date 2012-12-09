@@ -433,6 +433,7 @@ int read_keymaps (void)
 
     if (sagemap == NULL)
     {
+        log(log_config, "Config: sage.kbd not found, writing default keymap\n");
         if (!write_default_keymap())
         {
             return 0;

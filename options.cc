@@ -267,9 +267,14 @@ int read_config (void)
 
     if (configfile == NULL)
     {
-        return write_default_config();
+        log(log_config, "Config: sage.cfg not found, writing defaults\n");
+        write_default_config();
+        configfile = fopen(configfilename.c_str(), "r");
     }
-
+    if (configfile == NULL)
+    {
+        return sage_error("Something went very wrong, still can't read config file!\n");
+    }
     while (!feof(configfile))
     {
 
@@ -453,13 +458,14 @@ int read_config (void)
     }
 
     // Version-specific processing
-    if (adom_version != 100)
+    if ((adom_version != 100) && (config->spell_stats != 0))
     {
         config->spell_stats = 0;
     }
 
-    if (adom_version != 110)
+    if ((adom_version != 110) && (config->fix_flgs != 0))
     {
+        log(log_config, "Config: ADOM version not 1.1.0, disabling flg fix.\n");
         config->fix_flgs = 0;
     }
 

@@ -453,14 +453,6 @@ int read_config (void)
     }
 
     // Version-specific processing
-    char *version = getenv("ADOM_VERSION");
-    int adom_version = 0;
-
-    if (version != NULL)
-    {
-        sscanf(version, "%i", &adom_version);
-    }
-
     if (adom_version != 100)
     {
         config->spell_stats = 0;

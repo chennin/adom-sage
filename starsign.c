@@ -38,19 +38,23 @@ void starsign_select() {
 	}
 	else if (adom_version == 1204) {
 		BIRTHSIGN_ADDR = 0x8285d40;
-		JUMP_TO = 0x08139fb0;
+		JUMP_TO = 0x8139fb0;
 	}
 	else if (adom_version == 1205) {
 		BIRTHSIGN_ADDR = 0x8286948;
-		JUMP_TO = 0x0813a860;
+		JUMP_TO = 0x813a860;
 	}
 	else if (adom_version == 1206) {
 		BIRTHSIGN_ADDR = 0x828acbc;
-		JUMP_TO = 0x0813bf70;
+		JUMP_TO = 0x813bf70;
 	}
 	else if (adom_version == 1207) {
 		BIRTHSIGN_ADDR = 0x82921fc;
 		JUMP_TO = 0x81405a0;
+	}
+	else if (adom_version == 1208) {
+		BIRTHSIGN_ADDR = 0x82a5ea0;
+		JUMP_TO = 0x8145630;
 	}
 	if ((BIRTHSIGN_ADDR == 0) || (JUMP_TO == 0)) {
 		printf("Don't know where to put the birth date or jump to.  Unknown ADOM version %i ?\n", adom_version);

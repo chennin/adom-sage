@@ -33,7 +33,7 @@ const char *usage =
     "  --                    End of options to Sage; further options are for ADOM";
 
 const char *version =
-    "ADOM Sage version 0.9.5 - frontend for ADOM\n"
+    "ADOM Sage version 0.9.5a - frontend for ADOM\n"
     "ADOM is (C) Copyright 1994-2012 Thomas Biskup.\n"
     "ADOM Sage is Copyright (c) 2002 Joshua Kelley.\n"
     "ADOM Sage is Copyright (c) 2012 Christopher Henning.\n";
@@ -359,7 +359,7 @@ int main (int argc, char *argv[])
             case 2301084: // 32-bit Debian
                 version = "1207";
                 break;
-            case 2339772: // 32-bit Debian
+            case 2315196: // 32-bit Debian
                 version = "1208";
                 break;
             default:

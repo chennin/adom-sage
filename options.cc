@@ -484,6 +484,8 @@ int read_msg_maps (void)
     string mapfilename;
     FILE *mapfile;
     char line[255];
+    char *delim_pos;
+    char *subst;
     int no_skip = 0;
     attr_t attr = A_NORMAL;
     short color = COLOR_WHITE;
@@ -559,6 +561,13 @@ int read_msg_maps (void)
             {
                 suppress = 0;
             }
+            
+            else if (strcasecmp(line, ":replace") == 0)
+            {
+                attr = A_NORMAL;
+                color = COLOR_WHITE;
+                suppress = 0;
+            }
 
             else
             {
@@ -569,7 +578,15 @@ int read_msg_maps (void)
         else
         {
 
+            subst = NULL;
             // Process messages.
+            delim_pos = strchr(line, '|');
+            if ((delim_pos != NULL) && !suppress)
+            {
+                subst = strdup(delim_pos + 1);
+                *delim_pos = '\0';
+            }
+            
             log(log_config, "Msgmap: %i %i %i %i %s\n", no_skip,
                 (int) attr, (int) color, (int) suppress, line);
             iter = main_msgmap->find(line);
@@ -580,12 +597,19 @@ int read_msg_maps (void)
                 mi->no_skip = no_skip;
                 mi->attr = attr;
                 mi->color = color;
-                mi->subst = suppress ? "" : NULL;
+                if (subst != NULL)
+                {
+                    mi->subst = subst;
+                }
+                else
+                {
+                    mi->subst = suppress ? "" : NULL;
+                }
             }
 
             else
                 (*main_msgmap)[strdup(line)] =
-                    new MsgInfo(no_skip, attr, color, suppress ? "" : NULL);
+                    new MsgInfo(no_skip, attr, color, suppress ? "" : subst);
         }
     }
 

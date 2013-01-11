@@ -440,6 +440,20 @@ int StateCmdProcessor::vsprintf(char *str, const char *format, va_list ap)
     {
         iter = msgmap->find(str);
     }
+    
+    if (iter == msgmap->end())
+    {
+        for (MsgMap::const_iterator nstrict_iter = msgmap->begin(); 
+                                    nstrict_iter != msgmap->end(); 
+                                    nstrict_iter ++)
+        {
+            if (strstr(str, (*nstrict_iter).first) != NULL)
+            {
+                iter = nstrict_iter;
+                break;
+            }
+        }
+    }
 
     if (iter != msgmap->end())
     {

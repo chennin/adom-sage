@@ -33,7 +33,7 @@ const char *usage =
     "  --                    End of options to Sage; further options are for ADOM";
 
 const char *version =
-    "ADOM Sage version 0.9.5a - frontend for ADOM\n"
+    "ADOM Sage version 0.9.7 - frontend for ADOM\n"
     "ADOM is (C) Copyright 1994-2012 Thomas Biskup.\n"
     "ADOM Sage is Copyright (c) 2002 Joshua Kelley.\n"
     "ADOM Sage is Copyright (c) 2012 Christopher Henning.\n";

@@ -15,6 +15,8 @@ int adom_version;
 
 Config *config;
 MsgMap *main_msgmap;
+MsgMap *regex_msgmap;
+RegexMap *regex_map;
 
 char *cwd_path;
 string *config_path;
@@ -491,6 +493,9 @@ int read_msg_maps (void)
     short color = COLOR_WHITE;
     int suppress = 0;
     MsgMap::iterator iter;
+    MsgMap* cur_msgmap = main_msgmap;
+
+	regex_map = new RegexMap;
 
     mapfilename = *config_path + "/sage.msg";
     mapfile = fopen(mapfilename.c_str(), "r");
@@ -561,6 +566,16 @@ int read_msg_maps (void)
             {
                 suppress = 0;
             }
+
+            else if (strcasecmp(line, ":regex") == 0)
+            {
+                cur_msgmap = regex_msgmap;
+            }
+
+            else if (strcasecmp(line, ":no_regex") == 0)
+            {
+                cur_msgmap = main_msgmap;
+            }
             
             else if (strcasecmp(line, ":replace") == 0)
             {
@@ -589,9 +604,16 @@ int read_msg_maps (void)
             
             log(log_config, "Msgmap: %i %i %i %i %s\n", no_skip,
                 (int) attr, (int) color, (int) suppress, line);
-            iter = main_msgmap->find(line);
+            iter = cur_msgmap->find(line);
 
-            if (iter != main_msgmap->end())
+            if (cur_msgmap == regex_msgmap)
+            {
+                regex_t *target_regex = new regex_t;
+                regcomp(target_regex, line, REG_NOSUB);
+                (*regex_map)[strdup(line)] = target_regex;
+            }
+
+            if (iter != cur_msgmap->end())
             {
                 MsgInfo *mi = iter->second;
                 mi->no_skip = no_skip;
@@ -608,7 +630,7 @@ int read_msg_maps (void)
             }
 
             else
-                (*main_msgmap)[strdup(line)] =
+                (*cur_msgmap)[strdup(line)] =
                     new MsgInfo(no_skip, attr, color, suppress ? "" : subst);
         }
     }

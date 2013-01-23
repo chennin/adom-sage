@@ -158,6 +158,7 @@ int StateStartup::waddnstr(WINDOW *win, const char *str, int n)
  */
 
 StateCmdProcessor::StateCmdProcessor(MsgMap *msgmap_to_use,
+                                     MsgMap *regex_msgmap_to_use,
                                      KeyMap *keymap_to_use)
 {
     just_cleared = 0;
@@ -166,6 +167,7 @@ StateCmdProcessor::StateCmdProcessor(MsgMap *msgmap_to_use,
     msg_attr = A_NORMAL;
     msg_color = COLOR_WHITE;
     msgmap = msgmap_to_use;
+    re_msgmap = regex_msgmap_to_use;
     keymap = keymap_to_use;
     skip_next_msg = 0;
     mouse = false;
@@ -443,19 +445,23 @@ int StateCmdProcessor::vsprintf(char *str, const char *format, va_list ap)
     
     if (iter == msgmap->end())
     {
-        for (MsgMap::const_iterator nstrict_iter = msgmap->begin(); 
-                                    nstrict_iter != msgmap->end(); 
+        for (MsgMap::const_iterator nstrict_iter = re_msgmap->begin(); 
+                                    nstrict_iter != re_msgmap->end(); 
                                     nstrict_iter ++)
         {
-            if (strstr(str, (*nstrict_iter).first) != NULL)
+            regex_t *target_regex = (*regex_map)[(*nstrict_iter).first];
+            if (target_regex != NULL)
             {
-                iter = nstrict_iter;
-                break;
+                if (!regexec(target_regex, str, 0, NULL, 0))
+                {
+                     iter = nstrict_iter;
+                     break;
+                }
             }
         }
     }
 
-    if (iter != msgmap->end())
+    if ((iter != msgmap->end()) && (iter != re_msgmap->end()))
     {
         if (iter->second->color != COLOR_WHITE ||
             iter->second->attr != A_NORMAL)
@@ -517,7 +523,7 @@ int StateCmdProcessor::vsnprintf(char *str, size_t size, const char *format, va_
  * Running, accepting normal commands, doing normal messages, etc.
  */
 
-StateRunning::StateRunning() : StateCmdProcessor(main_msgmap, main_keymap)
+StateRunning::StateRunning() : StateCmdProcessor(main_msgmap, regex_msgmap, main_keymap)
 {
     allow_repeat = true;
 }
@@ -614,7 +620,7 @@ void StateRunning::handle_cmd(WINDOW *win, Command cmd)
  * Handles the examine command ('l'ook)
  */
 
-StateExamine::StateExamine() : StateCmdProcessor(main_msgmap, look_keymap)
+StateExamine::StateExamine() : StateCmdProcessor(main_msgmap, regex_msgmap, look_keymap)
 {
 }
 
@@ -641,7 +647,7 @@ void StateExamine::handle_cmd(WINDOW *win, Command cmd)
  * Handles selecting a location - for 'n'ame command, teleport control
  */
 
-StateLocate::StateLocate() : StateCmdProcessor(main_msgmap, locate_keymap)
+StateLocate::StateLocate() : StateCmdProcessor(main_msgmap, regex_msgmap, locate_keymap)
 {
     if (config->mouse)
     {
@@ -693,7 +699,7 @@ void StateLocate::handle_cmd(WINDOW *win, Command cmd)
  * Handles selecting a target - shooting, ordering companions, etc.
  */
 
-StateTarget::StateTarget() : StateCmdProcessor(main_msgmap, target_keymap)
+StateTarget::StateTarget() : StateCmdProcessor(main_msgmap, regex_msgmap, target_keymap)
 {
     if (config->mouse)
     {

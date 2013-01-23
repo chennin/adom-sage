@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <regex.h>
 
 #include "stl.h"
 
@@ -210,7 +211,10 @@ extern char *cwd_path;
 extern string *config_path;
 
 typedef STRING_HASH(MsgInfo *) MsgMap;
+typedef STRING_HASH(regex_t *) RegexMap;
 extern MsgMap *main_msgmap;
+extern MsgMap *regex_msgmap;
+extern RegexMap *regex_map;
 
 extern Config *config;
 

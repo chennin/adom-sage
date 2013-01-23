@@ -84,7 +84,9 @@ class StateDrawable : public State
 class StateCmdProcessor : public State
 {
     public:
-        StateCmdProcessor(MsgMap *msgmap_to_use, KeyMap *keymap_to_use);
+        StateCmdProcessor(MsgMap *msgmap_to_use,
+                          MsgMap *regex_msgmap_to_use,
+                          KeyMap *keymap_to_use);
         ~StateCmdProcessor();
 
         int wclear(WINDOW *win);
@@ -122,6 +124,8 @@ class StateCmdProcessor : public State
         short msg_color;
         attr_t msg_attr;
         MsgMap *msgmap;
+        MsgMap *re_msgmap;
+        
 
         // Command processing
         string cmdstring;

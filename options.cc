@@ -434,7 +434,7 @@ int read_config (void)
 
             else if (ch >= 'a' && ch <= 'z')
             {
-                macro_num = ch - 'a';
+                macro_num = ch - 'a' + 10;
             }
 
             if (config->macro[macro_num])

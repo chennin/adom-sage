@@ -124,6 +124,8 @@ MSG_HANDLER(stat_handler)
 
 const char *exp_msg =
     "Exp: %d/%lu__";
+const char *exp_msg_2 =
+    "Exp: %d/%lld__";
 MSG_HANDLER(exp_handler)
 {
     int level;
@@ -293,6 +295,7 @@ void init_msg_maps(void)
     (*main_msgmap)["TF: 4_"] = new MsgInfo(location_handler, (void *) locToEF);
     (*main_msgmap)[stat_msg] = new MsgInfo(stat_handler, NULL);
     (*main_msgmap)[exp_msg] = new MsgInfo(exp_handler, NULL);
+    (*main_msgmap)[exp_msg_2] = new MsgInfo(exp_handler, NULL);
 
     // Tower of Eternal Flames messages
     (*main_msgmap)[toef_msg] = new MsgInfo(toef_handler, NULL);

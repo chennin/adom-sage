@@ -361,8 +361,8 @@ Known Bugs
   80 columns wide.
 
 
-Credits
--------
+Credits - Josh Kelley
+---------------------
 Thanks to Thomas Biskup for making such an excellent game.
 
 The Windows version of ADOM Sage uses PDCurses, a getopt library by
@@ -385,3 +385,12 @@ On a more personal note, thanks to my wife for her love and support (and
 for allowing me the time to do this sort of thing).  Thanks to God for the
 ability to do this sort of thing.
 
+Credits - Chris Henning
+-----------------------
+
+Thanks to the bug reporters:
+tappi
+ignacio
+samim
+
+Thanks to jaakkos for the starsign selectors

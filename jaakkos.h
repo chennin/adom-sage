@@ -36,7 +36,6 @@ void load_requirements();
 void starsign_select();
 void command_hook();
 int save_hook(char *msg, int a, char b);
-pid_t try_fork();
 
 void* shm_init(size_t bytes);
 void shm_deinit();

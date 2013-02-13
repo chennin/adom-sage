@@ -1,19 +1,6 @@
 #include "jaakkos.h"
 
 void __attribute__ ((constructor)) my_load(void);
-void __attribute__ ((destructor)) my_unload(void);
-
-// fork or die
-pid_t try_fork() {
-	pid_t forkpid = fork();
-
-	if(forkpid == -1) {
-		perror("fork()");
-		exit(1);
-	}
-
-	return forkpid;
-}
 
 // Called when the library is loaded and before dlopen() returns
 void my_load(void) {
@@ -99,6 +86,4 @@ void my_load(void) {
 	// inject autosaver - on 'S' command
 	//  *((void**)0x08090735) = &save_hook - 0x08090739;
 }
-
-void my_unload(void) {}
 

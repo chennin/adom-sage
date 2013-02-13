@@ -198,7 +198,9 @@ void initialize()
     result = result && read_keymaps();
     result = result && read_config();
     result = result && read_msg_maps();
-    inject_my_starsign();
+    if (config->select_starsign) {
+      inject_my_starsign();
+    }
     //init_help();
     // read_keymaps checks that ADOM is configured; we want to ensure that
     // before checking on our own configuration

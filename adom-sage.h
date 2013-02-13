@@ -153,6 +153,7 @@ struct Config
     int fast_selling;        // Remove unnecessary messages while selling
     int mindcraft_stats;     // Show mindcraft damage, etc.
     int more_weapon_stats;   // Augment weapon stats display
+    int select_starsign;     // Select starsign or not
     int short_alchemy;       // Shorten alchemy display
     int short_named_monsters;// Shorten named monsters' titles
     int spell_stats;         // Show spell range, duration, etc.

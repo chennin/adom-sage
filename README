@@ -155,6 +155,9 @@ section for details.
 
 Quiet_Macros: If true, the screen won't be updated while running a macro.
 
+Select_Starsign: If true (the default), you will be able to select your
+birth sign on character generation.
+
 Short_Alchemy: If true, shortens the alchemy display to always fit on
 one screen.  Disabled by default.
 

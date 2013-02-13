@@ -80,6 +80,7 @@ int write_default_config (void)
     fputs("More_Weapon_Stats    = true\n", configfile);
     fputs("Mouse                = true\n", configfile);
     fputs("Quiet_Macros         = true\n", configfile);
+    fputs("Select_Starsign      = true\n", configfile);
     fputs("Short_Alchemy        = false\n", configfile);
     fputs("Short_Named_Monsters = true\n", configfile);
     fputs("Spell_Stats          = false\n", configfile);
@@ -244,6 +245,7 @@ int read_config (void)
     config->fix_flgs = 1;
     config->fix_typos = 1;
     config->more_weapon_stats = 1;
+    config->select_starsign = 1;
     config->short_alchemy = 0;
     config->short_named_monsters = 1;
     config->spell_stats = 1;
@@ -349,6 +351,11 @@ int read_config (void)
         if (strcasecmp(param_name, "more_weapon_stats") == 0)
         {
             config->more_weapon_stats = (strcasecmp(param_value, "true") == 0);
+        }
+
+        if (strcasecmp(param_name, "select_starsign") == 0)
+        {
+            config->select_starsign = (strcasecmp(param_value, "true") == 0);
         }
 
         if (strcasecmp(param_name, "spell_stats") == 0)

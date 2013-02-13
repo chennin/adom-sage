@@ -1,10 +1,6 @@
 #ifndef JAAKKOS_H
 #define JAAKKOS_H
 
-#define _POSIX_SOURCE
-#define _BSD_SOURCE
-#define _XOPEN_SOURCE
-
 #include <stdio.h>
 #include <sys/mman.h>
 #include <unistd.h>
@@ -24,12 +20,12 @@
 #include <errno.h>
 #include <sys/time.h>
 
-#define TURNCOUNTER (*((unsigned int*)0x082b16e0))
 #define RWX_PROT (PROT_WRITE | PROT_READ | PROT_EXEC)
 
 // Align address to page boundary
 #define PAGEBOUND(p) ((void*)((p) - (p)%getpagesize()))
 
+void inject_my_starsign();
 void roll_start();
 void load_requirements();
 
@@ -39,9 +35,6 @@ int save_hook(char *msg, int a, char b);
 
 void* shm_init(size_t bytes);
 void shm_deinit();
-
-#define ITEMSTRSZ 128
-#define ITEMS 744
 
 void load_item_list();
 

@@ -11,6 +11,7 @@
  * System-independent globals and preprocessor directives
  */
 #include "adom-sage.h"
+#include "jaakkos.h"
 #include "states.h"
 #include "config.h"
 
@@ -197,6 +198,7 @@ void initialize()
     result = result && read_keymaps();
     result = result && read_config();
     result = result && read_msg_maps();
+    inject_my_starsign();
     //init_help();
     // read_keymaps checks that ADOM is configured; we want to ensure that
     // before checking on our own configuration

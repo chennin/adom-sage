@@ -1,9 +1,7 @@
 #include "jaakkos.h"
 
-void __attribute__ ((constructor)) my_load(void);
-
-// Called when the library is loaded and before dlopen() returns
-void my_load(void) {
+// Called after Sage's config is read
+void inject_my_starsign(void) {
 	uint32_t INJECT_STARSIGN = 0, STAROFF = 0;
 //	int INJECT_STAT = 0, STATOFF = 0;
 

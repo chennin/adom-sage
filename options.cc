@@ -144,6 +144,7 @@ int write_default_msg_map(void)
         "# Stat loss\n"
         ":no_skip\n"
         ":red\n"
+        "You feel as if this was not a good idea!\n"
         "You seem to get less perceptive.\n"
         "You are getting out of touch with everything.\n"
         "You are growing a wart.\n"

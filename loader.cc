@@ -76,7 +76,7 @@ void inject_my_starsign(void) {
 	//  *((void**)0x080756C4) = &roll_start - 0x080756C8;
 
 	// inject starsign selector
-  *((char**)INJECT_STARSIGN) = ((char*)(&starsign_select)) - STAROFF;
+        *((char**)INJECT_STARSIGN) = ((char*)(&starsign_select)) - STAROFF;
 
 	// inject autosaver - every 1000 turn
 	//  *((void**)0x0808f990) = &command_hook - 0x0808f994;

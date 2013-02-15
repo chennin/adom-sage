@@ -442,24 +442,6 @@ int StateCmdProcessor::vsprintf(char *str, const char *format, va_list ap)
     {
         iter = msgmap->find(str);
     }
-    
-    if (iter == msgmap->end())
-    {
-        for (MsgMap::const_iterator nstrict_iter = re_msgmap->begin(); 
-                                    nstrict_iter != re_msgmap->end(); 
-                                    nstrict_iter ++)
-        {
-            regex_t *target_regex = (*regex_map)[(*nstrict_iter).first];
-            if (target_regex != NULL)
-            {
-                if (!regexec(target_regex, str, 0, NULL, 0))
-                {
-                     iter = nstrict_iter;
-                     break;
-                }
-            }
-        }
-    }
 
     if ((iter != msgmap->end()) && (iter != re_msgmap->end()))
     {

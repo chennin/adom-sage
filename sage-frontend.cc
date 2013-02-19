@@ -368,6 +368,9 @@ int main (int argc, char *argv[])
             case 2379196: // 32-bit Debian
                 version = "12010";
                 break;
+            case 2378908: // 32-bit Debian
+                version = "12011";
+                break;
             default:
                 version = "0";
                 break;

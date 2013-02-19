@@ -410,8 +410,21 @@ int read_keymaps (void)
 
     init_cmdcodes(cmdcode);
 
+    char *version = getenv("ADOM_VERSION");
+    int adom_version = 0;
+
+    if (version != NULL)
+    {
+        sscanf(version, "%i", &adom_version);
+    }
+
+    string kbdfile = "/.adom.kbd";
+    if (adom_version >= 12011) {
+        kbdfile = "/adom.kbd";
+    }
+
     // Open ADOM keymap, check that ADOM has been run
-    mapfilename = *config_path + ADOM_KBD_PATH;
+    mapfilename = *config_path + kbdfile;
     adommap = fopen(mapfilename.c_str(), "r");
 
     if (adommap == NULL)

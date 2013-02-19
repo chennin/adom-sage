@@ -63,7 +63,6 @@ extern UNLINK    real_unlink;
 
 // Linux - ADOM config directories
 #define ADOM_DATA_PATH "/.adom.data"
-#define ADOM_KBD_PATH "/.adom.kbd"
 
 // Linux - data type definitions
 #define ULONG_PTR unsigned

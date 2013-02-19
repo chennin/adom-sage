@@ -238,6 +238,50 @@ WARNING: Be careful when using messages containing printing identifiers
 (such as %s), as changing the order of different modifiers,
 leaving out several or adding extra can lead to unexpected behavior.
 
+
+Regular expression matching
+
+It is possible to match a wider range of messages using regular
+expressions.
+
+Simply specify :regex directive and then add usual color/suppression messages.
+These lines are stored in different place and won't affect normal matching.
+Specifying :no_regex directive will cause all subsequent lines 
+to be interpreted normally.
+
+Note that regex expressions, unlike normal matching,
+work with ADOM output messages.
+
+For example, to color "displacement" messages (when one monster
+slips by another) ADOM input message looks like "%s %s %s"
+and adding it as normal Sage line will likely cause processing
+a lot of other messages which share the input.
+
+With regular expression matching it is possible to filter/color
+only necessary messages without unwanted and unexpected changes.
+
+Regex format
+Lines should follow internal POSIX regex_t format.
+You can check full specification here:
+http://en.wikipedia.org/wiki/Regular_expression#POSIX_Basic_Regular_Expressions
+
+Typically you'll want to use the most basic things:
+
+ . matches any symbol
+ * matches the preceding symbol zero or more times
+
+Short examples:
+
+:regex
+:suppress
+.*displaces.*
+
+This will allow you to suppress all messages that contain "displaces"
+where X and Y can be any monsters.
+
+Note that you should still check Sage log to ensure that messages
+are printed in the correct way for expressions to work.
+
 You can add your own messages to the sage.msg file if you wish, but
 the messages that you add must match exactly the internal format used
 by ADOM.  To determine ADOM's internal format for a particular message,

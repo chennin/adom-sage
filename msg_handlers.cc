@@ -271,7 +271,7 @@ MSG_HANDLER(confirm_handler)
 void init_msg_maps(void)
 {
     main_msgmap = new MsgMap;
-	regex_msgmap = new MsgMap;
+    regex_msgmap = new MsgMap;
 
     // Tracking state changes
     (*main_msgmap)[levelup_msg] = new MsgInfo(levelup_handler, NULL);

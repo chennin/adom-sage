@@ -205,6 +205,7 @@ You can also specify three special directives:
     :no_skip - message cannot be skipped by pressing Enter at a '(more)' prompt
     :allow_skip - normal handling for a message
     :suppress - message will not be displayed at all
+    :replace - replace string before the pipe character with the string after
 
 Short example:
 
@@ -218,26 +219,39 @@ Short example:
     :red
     You seem to get less perceptive.
 
+    #Stat gain
+    :replace
+    Your senses sharpen!|Your perception has improved!
+
 'Your muscles feel stronger!' will be displayed in light green and
 cannot be skipped by pressing Enter at a '(more)' prompt.  Same with
 'Your senses sharpen!'.  'You seem to get less perceptive.' will display
 as red.  It also cannot be skipped by pressing Enter; the file lists
 :no_skip before it and doesn't change that, even though it's a new block
-of messages.
+of messages. Finally, "Your senses sharpen!" will be replaced with "Your
+perception has improved!"
 
-It is also possible to write your own replacements for ADOM messages.
-Simply specify the initial line followed by '|' symbol and 
-replacement text.
-
-Short example:
-
-#Stat gain
-Your senses sharpen!|Your perception has improved!
+For replacements, start a :replace block, then specify the initial line
+followed by a pipe ('|') symbol and the replacement text.
 
 WARNING: Be careful when using messages containing printing identifiers
 (such as %s), as changing the order of different modifiers,
 leaving out several or adding extra can lead to unexpected behavior.
 
+You can add your own messages to the sage.msg file if you wish, but
+the messages that you add must match exactly the internal format used
+by ADOM.  To determine ADOM's internal format for a particular message,
+run adom-sage with the --debug-level=3 option and check /tmp/sage.log
+after running.  Note that some messages are processed in multiple
+stages; you may see several 'Message  in' and 'Message out' entries in
+/tmp/sage.log for a single 'New message'.  For message coloring and
+no_skip setup, you can list any of the 'message in' or 'message out'
+messages for message coloring and no_skip setup.  For suppress to work
+properly, you must list the final message in or message out.
+
+The default sage.msg file contains several messages that you may wish
+to suppress.  These messages are commented out; to actually suppress them,
+delete the initial '#' from each line.
 
 Regular expression matching
 
@@ -246,10 +260,10 @@ expressions.
 
 Simply specify :regex directive and then add usual color/suppression messages.
 These lines are stored in different place and won't affect normal matching.
-Specifying :no_regex directive will cause all subsequent lines 
+Specifying the :no_regex directive will cause all subsequent lines
 to be interpreted normally.
 
-Note that regex expressions, unlike normal matching,
+Note that regular expressions, unlike normal matching,
 work with ADOM output messages.
 
 For example, to color "displacement" messages (when one monster
@@ -281,21 +295,6 @@ where X and Y can be any monsters.
 
 Note that you should still check Sage log to ensure that messages
 are printed in the correct way for expressions to work.
-
-You can add your own messages to the sage.msg file if you wish, but
-the messages that you add must match exactly the internal format used
-by ADOM.  To determine ADOM's internal format for a particular message,
-run adom-sage with the --debug-level=3 option and check /tmp/sage.log
-after running.  Note that some messages are processed in multiple
-stages; you may see several 'Message  in' and 'Message out' entries in
-/tmp/sage.log for a single 'New message'.  For message coloring and
-no_skip setup, you can list any of the 'message in' or 'message out'
-messages for message coloring and no_skip setup.  For suppress to work
-properly, you must list the final message in or message out.
-
-The default sage.msg file contains several messages that you may wish
-to suppress.  These messages are commented out; to actually suppress them,
-delete the initial '#' from each line.
 
 
 The sage.kbd file - Commands Added by ADOM Sage

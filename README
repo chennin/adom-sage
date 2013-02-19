@@ -204,7 +204,7 @@ by ADOM as directives:
 You can also specify three special directives:
     :no_skip - message cannot be skipped by pressing Enter at a '(more)' prompt
     :allow_skip - normal handling for a message
-    :suppress - message will not display at all
+    :suppress - message will not be displayed at all
 
 Short example:
 
@@ -224,6 +224,19 @@ cannot be skipped by pressing Enter at a '(more)' prompt.  Same with
 as red.  It also cannot be skipped by pressing Enter; the file lists
 :no_skip before it and doesn't change that, even though it's a new block
 of messages.
+
+It is also possible to write your own replacements for ADOM messages.
+Simply specify the initial line followed by '|' symbol and 
+replacement text.
+
+Short example:
+
+#Stat gain
+Your senses sharpen!|Your perception has improved!
+
+WARNING: Be careful when using messages containing printing identifiers
+(such as %s), as changing the order of different modifiers,
+leaving out several or adding extra can lead to unexpected behavior.
 
 You can add your own messages to the sage.msg file if you wish, but
 the messages that you add must match exactly the internal format used

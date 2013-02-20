@@ -232,6 +232,14 @@ int write_default_msg_map(void)
         "#The %s returns!\n"
         "#You manage to catch it.\n"
         "#You fail to catch it.\n"
+        "\n"
+        "# Tell the world we're using Sage\n"
+        ":replace\n:yellow\n"
+        "Ancient Domains of Mystery__ Version 1.0.0|Ancient Domains of Mystery__ Version 1.0.0 running with ADOM Sage\n"
+        "Ancient Domains of Mystery__ Version 1.2.0|Ancient Domains of Mystery__ Version 1.2.0 running with ADOM Sage\n"
+        "Ancient Domains of Mystery__ Version 1.1.1|Ancient Domains of Mystery__ Version 1.1.1 running with ADOM Sage\n"
+        ":white\n"
+        "Ancient Domains Of Mystery|Ancient Domains Of Mystery with ADOM Sage\n"
         , mapfile);
     fclose(mapfile);
     return 1;
@@ -505,7 +513,7 @@ int read_msg_maps (void)
     MsgMap::iterator iter;
     MsgMap* cur_msgmap = main_msgmap;
 
-	regex_map = new RegexMap;
+    regex_map = new RegexMap;
 
     mapfilename = *config_path + "/sage.msg";
     mapfile = fopen(mapfilename.c_str(), "r");
@@ -550,7 +558,7 @@ int read_msg_maps (void)
             continue;
         }
 
-        // Process directives: color names, skip or noskip, suppress
+        // Process directives: color names, skip or noskip, suppress, replace, regex
         if (line[0] == ':')
         {
             if (strcasecmp(line, ":suppress") == 0)
@@ -619,7 +627,14 @@ int read_msg_maps (void)
             if (cur_msgmap == regex_msgmap)
             {
                 regex_t *target_regex = new regex_t;
-                regcomp(target_regex, line, REG_NOSUB);
+                int comperr = regcomp(target_regex, line, REG_NOSUB);
+                if (comperr > 0) {
+                        size_t length = regerror(comperr, target_regex, NULL, 0);
+                        char *buffer = (char*)malloc(length);
+                        if (buffer == NULL) { perror("Unable to allocate memory to display error."); }
+                        regerror(comperr, target_regex, buffer, length);
+                        return sage_error(buffer);
+                }
                 (*regex_map)[strdup(line)] = target_regex;
             }
 

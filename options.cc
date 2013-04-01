@@ -233,13 +233,6 @@ int write_default_msg_map(void)
         "#You manage to catch it.\n"
         "#You fail to catch it.\n"
         "\n"
-        "# Tell the world we're using Sage\n"
-        ":replace\n:yellow\n"
-        "Ancient Domains of Mystery__ Version 1.0.0|Ancient Domains of Mystery__ Version 1.0.0 running with ADOM Sage\n"
-        "Ancient Domains of Mystery__ Version 1.2.0|Ancient Domains of Mystery__ Version 1.2.0 running with ADOM Sage\n"
-        "Ancient Domains of Mystery__ Version 1.1.1|Ancient Domains of Mystery__ Version 1.1.1 running with ADOM Sage\n"
-        ":white\n"
-        "Ancient Domains Of Mystery|Ancient Domains Of Mystery with ADOM Sage\n"
         , mapfile);
     fclose(mapfile);
     return 1;

@@ -263,6 +263,12 @@ MSG_HANDLER(confirm_handler)
     }
 }
 
+// Version messages
+const char *flg_version_msg = "Version 1.2.0";
+
+const char *version_msg_111 = "Ancient Domains of Mystery__ Version 1.1.1";
+const char *version_msg_100 = "Ancient Domains of Mystery__ Version 1.0.0";
+const char *version_msg_120 = "Ancient Domains of Mystery__ Version 1.2.0";
 
 /*---------------------------------------------------------------------------
  * Initialization
@@ -322,5 +328,14 @@ void init_msg_maps(void)
 
     // Auto swap with neutrals
     (*main_msgmap)[confirm_msg] = new MsgInfo(confirm_handler, NULL);
+
+    // Version info
+    attr_t attr = A_NORMAL;
+    short color = COLOR_WHITE;
+    get_color("yellow", &attr, &color);
+    (*main_msgmap)[flg_version_msg] = new MsgInfo("Version 1.2.0 with ADOM Sage " SAGE_VERSION);
+    (*main_msgmap)[version_msg_111] = new MsgInfo(0, attr, color, "Ancient Domains of Mystery__ Version 1.1.1 with ADOM Sage " SAGE_VERSION);
+    (*main_msgmap)[version_msg_100] = new MsgInfo(0, attr, color, "Ancient Domains of Mystery__ Version 1.0.0 with ADOM Sage " SAGE_VERSION);
+    (*main_msgmap)[version_msg_120] = new MsgInfo(0, attr, color, "Ancient Domains of Mystery__ Version 1.2.0 with ADOM Sage " SAGE_VERSION);
 }
 

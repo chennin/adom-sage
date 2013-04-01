@@ -418,6 +418,8 @@ Known Bugs
 * If you have large numbers of high-damage spells under ADOM 1.0.0,
   the spell screen may not display correctly if your screen is less than
   80 columns wide.
+* 1.2.0p12 is not supported, as it was out for only a day before p13 was
+  released.
 
 
 Credits - Josh Kelley

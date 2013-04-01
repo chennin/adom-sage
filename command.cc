@@ -425,6 +425,7 @@ int read_keymaps (void)
 
     // Open ADOM keymap, check that ADOM has been run
     mapfilename = *config_path + kbdfile;
+    log(log_config, "Attempting to open %s\n", mapfilename.c_str());
     adommap = fopen(mapfilename.c_str(), "r");
 
     if (adommap == NULL)

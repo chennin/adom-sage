@@ -67,6 +67,10 @@ void starsign_select() {
 		BIRTHSIGN_ADDR = 0x82a6d20;
 		JUMP_TO = 0x8144910;
 	}
+	else if (adom_version == 12012) {
+		BIRTHSIGN_ADDR = 0x82b8c30;
+		JUMP_TO = 0x8144620;
+	}
 	else if (adom_version == 12013) {
 		BIRTHSIGN_ADDR = 0x82b8c90;
 		JUMP_TO = 0x8144690;

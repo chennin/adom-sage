@@ -1,4 +1,4 @@
-README FILE for ADOM Sage version 0.9.12
+README FILE for ADOM Sage version 0.9.13b
 A frontend for ADOM 1.0.0, 1.1.1, and 1.2.0pX
 ADOM Sage is Copyright (c) 2002 by Josh Kelley
 ADOM Sage is Copyright (c) 2013 by Christopher Henning
@@ -11,6 +11,7 @@ ADOM Sage is a frontend to ADOM that adds various usability enhancements and
 minor bugfixes.  A quick list of added features:
  * Colored messages
  * Spell and mindcraft screens now display range, damage, and duration.
+ * Clerical to arcane spellbook name translation
  * Macros
  * Support for block- and line-drawing characters (instead of #, -, |)
  * Support for alternate cursor styles

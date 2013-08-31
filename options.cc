@@ -224,7 +224,7 @@ int write_default_msg_map(void)
         "\n"
         "# Clerical to arcane spellbook translations\n"
         ":replace\n"
-	" of Rain of Sorrow| of Rain of Sorrow (Acid Ball)\n"
+        " of Rain of Sorrow| of Rain of Sorrow (Acid Ball)\n"
         " of Baptism of Fire| of Baptism of Fire (Burning Hands)\n"
         " of Divine Favour| of Divine Favour (Create Item)\n"
         " of Greater Divine Touch| of Greater Divine Touch (Death Ray)\n"

@@ -97,6 +97,10 @@ const char *memorial_msg
 MSG_HANDLER(memorial_handler)
 {
     push_state(new StateMemorial(state));
+    if (config->auto_dump_flg == 1)
+    {
+        key_queue->push_back('y');
+    }
 }
 
 

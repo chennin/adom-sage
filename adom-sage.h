@@ -160,6 +160,7 @@ struct Config
     int short_named_monsters;// Shorten named monsters' titles
     int spell_stats;         // Show spell range, duration, etc.
     int suppress_toef;       // Suppress redundant ToEF messages
+    int auto_dump_flg;       // Answer "Y" to "Do you want to create a memorial..."
 
     // Bugfix features
     int fix_typos;           // Miscellaneous bugfixes, typo corrections, ...

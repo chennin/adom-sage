@@ -297,6 +297,7 @@ int read_config (void)
     config->cursor_visibility = 1;
     config->cursor_attr = A_NORMAL;
     config->quiet_macros = 1;
+    config->auto_dump_flg = 1;
 
     for (int i = 0; i < numMacros; i++)
     {
@@ -361,6 +362,11 @@ int read_config (void)
         if (strcasecmp(param_name, "auto_swap_neutral") == 0)
         {
             config->auto_swap_neutral = (strcasecmp(param_value, "true") == 0);
+        }
+
+        if (strcasecmp(param_name, "auto_dump_flg") == 0)
+        {
+            config->auto_dump_flg = (strcasecmp(param_value, "true") == 0);
         }
 
         if (strcasecmp(param_name, "fast_more") == 0)

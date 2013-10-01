@@ -778,11 +778,19 @@ StateMemorial::StateMemorial (StateCmdProcessor *cmd_processor)
 
 int StateMemorial::wgetch(WINDOW *win)
 {
-    int result = get_key(win);
-
-    if (result == 'y' || result == 'Y')
+    int result;
+    if (config->auto_dump_flg == 1)
     {
-        do_log = true;
+        key_queue->push_back('y');
+	pop_state();
+    }
+    else {
+        result = get_key(win);
+
+        if (result == 'y' || result == 'Y')
+        {
+            do_log = true;
+        }
     }
 
     return result;
@@ -828,7 +836,27 @@ int StateMemorial::unlink(const char *pathname)
 
         do_log = false;
     }
-
+    pop_state();
     return real_unlink(pathname);
+}
+
+/*
+	StateFlgSuccess
+	Accept [nN ] at [Press SPACE to Continue]
+*/
+StateFlgSuccess::StateFlgSuccess (StateCmdProcessor *cmd_processor)
+    : StateDecorator (cmd_processor)
+{
+}
+
+int StateFlgSuccess::wgetch(WINDOW *win)
+{
+    int result = get_key(win);
+    if ((config->auto_dump_flg == 1) && (result == 'n' || result == 'N' || result == ' '))
+    {
+        key_queue->push_back(' ');
+    }
+
+    return result;
 }
 

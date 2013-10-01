@@ -97,12 +97,14 @@ const char *memorial_msg
 MSG_HANDLER(memorial_handler)
 {
     push_state(new StateMemorial(state));
-    if (config->auto_dump_flg == 1)
-    {
-        key_queue->push_back('y');
-    }
 }
 
+const char *flg_success_msg
+= "Final log written to '%s' in directory '%s'.";
+MSG_HANDLER(flg_success_handler)
+{
+    push_state(new StateFlgSuccess(state));
+}
 
 /*---------------------------------------------------------------------------
  * Game status tracking
@@ -292,6 +294,7 @@ void init_msg_maps(void)
     (*main_msgmap)[minstrel_msg] = new MsgInfo(minstrel_handler, NULL);
     (*main_msgmap)[game_summary_msg] = new MsgInfo(game_summary_handler, NULL);
     (*main_msgmap)[memorial_msg] = new MsgInfo(memorial_handler, NULL);
+    (*main_msgmap)[flg_success_msg] = new MsgInfo(flg_success_handler, NULL);
 
     // Tracking configuration changes
     (*main_msgmap)[fastmore_msg] = new MsgInfo(fastmore_handler, NULL);

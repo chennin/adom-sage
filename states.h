@@ -428,6 +428,17 @@ class StateMemorial : public StateDecorator
         bool do_log;
 };
 
+class StateFlgSuccess : public StateDecorator
+{
+    public:
+        StateFlgSuccess(StateCmdProcessor *cmd_processor);
+        const char *name(void)
+        {
+            return "flg written";
+        };
+        int wgetch(WINDOW *win);
+};
+
 void push_state(State *state);
 void pop_state(void);
 State *cur_state(void);

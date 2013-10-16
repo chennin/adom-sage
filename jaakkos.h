@@ -26,8 +26,9 @@
 #define PAGEBOUND(p) ((void*)((p) - (p)%getpagesize()))
 
 void inject_my_starsign();
-void roll_start();
-void load_requirements();
+void inject_autosaver();
+//void roll_start();
+//void load_requirements();
 
 void starsign_select();
 void command_hook();
@@ -36,7 +37,10 @@ int save_hook(char *msg, int a, char b);
 void* shm_init(size_t bytes);
 void shm_deinit();
 
-void load_item_list();
+pid_t try_fork();
+//void load_item_list();
+//#define ITEMSTRSZ 128
+//#define ITEMS 744
 
 #endif
 

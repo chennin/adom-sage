@@ -201,6 +201,9 @@ void initialize()
     if (config->select_starsign) {
       inject_my_starsign();
     }
+    if (adom_version == 111) {
+      inject_autosaver();
+    }
     //init_help();
     // read_keymaps checks that ADOM is configured; we want to ensure that
     // before checking on our own configuration

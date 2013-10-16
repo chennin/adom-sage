@@ -1,18 +1,35 @@
 #include "jaakkos.h"
 
+// fork or die
+pid_t try_fork() {
+  pid_t forkpid = fork();
+
+  if(forkpid == -1) {
+    perror("fork()");
+    exit(1);
+  }
+
+  return forkpid;
+}
+
+int get_version() {
+        // Get ADOM version number, set by Sage
+        char *version = getenv("ADOM_VERSION");
+        int adom_version = 0;
+
+        if (version != NULL)
+        {
+                sscanf(version, "%i", &adom_version);
+        }
+	return adom_version;
+}
+
 // Called after Sage's config is read
 void inject_my_starsign(void) {
 	uint32_t INJECT_STARSIGN = 0, STAROFF = 0;
 //	int INJECT_STAT = 0, STATOFF = 0;
 
-	// Get ADOM version number, set by Sage
-	char *version = getenv("ADOM_VERSION");
-	int adom_version = 0;
-
-	if (version != NULL)
-	{
-		sscanf(version, "%i", &adom_version);
-	}
+	int adom_version = get_version();
 
 	/*
 	INJECT_* is the address in memory to overwrite with the location of our function.
@@ -79,9 +96,7 @@ void inject_my_starsign(void) {
 	//  load_item_list();
 	if(
 			//     mprotect(PAGEBOUND(0x080756C4), getpagesize(), RWX_PROT) ||
-			mprotect(PAGEBOUND(INJECT_STARSIGN), getpagesize(), RWX_PROT) // ||
-			//     mprotect(PAGEBOUND(0x0808f990), getpagesize(), RWX_PROT) ||
-			//     mprotect(PAGEBOUND(0x08090735), getpagesize(), RWX_PROT)
+			mprotect(PAGEBOUND(INJECT_STARSIGN), getpagesize(), RWX_PROT) /* starsign */
 	  ) {
 		perror("mprotect()");
 		exit(1);
@@ -92,11 +107,24 @@ void inject_my_starsign(void) {
 
 	// inject starsign selector
         *((char**)INJECT_STARSIGN) = ((char*)(&starsign_select)) - STAROFF;
-
-	// inject autosaver - every 1000 turn
-	//  *((void**)0x0808f990) = &command_hook - 0x0808f994;
-
-	// inject autosaver - on 'S' command
-	//  *((void**)0x08090735) = &save_hook - 0x08090739;
 }
 
+void inject_autosaver(void) {
+	int adom_version = get_version();
+        if(
+                        /* For now, autosave only works with 1.1.1. #define out addresses later. */
+                        mprotect(PAGEBOUND(0x0808f990), getpagesize(), RWX_PROT) || /* autosave command_hook */
+                        mprotect(PAGEBOUND(0x08090735), getpagesize(), RWX_PROT) /* autosave save_hook */
+          ) {
+                perror("mprotect()");
+                exit(1);
+        }
+
+        if (adom_version == 111) {
+                // inject autosaver - every 1000 turn
+                *((char**)0x0808f990) = ((char*)(&command_hook)) - 0x0808f994;
+
+                // inject autosaver - on 'S' command
+                *((char**)0x08090735) = ((char*)(&save_hook)) - 0x08090739;
+        }
+}

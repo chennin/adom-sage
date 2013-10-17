@@ -127,6 +127,13 @@ on graphics for more details.
 Draw_Lines: If true, replace '-' and '|' with line symbols.  See the
 section on graphics for more details.
 
+Enable_Autosave: If true, automatically save a backup of the running game
+every 1000 turns, and when "Sn" (save - no) is pressed. Version 1.1.1 only!
+
+Enable_Reroller: If true, enable the character reroller during character
+creation, allowing you to reroll for better stats. See the roller screen for
+commands. Version 1.1.1 only!
+
 Fast_More: If true, any key will be accepted when the '(more)' prompt is
 displayed.  In other words, this has the same effect as ADOM's Fast_More
 option, but ADOM Sage currently doesn't check ADOM's Fast_More option

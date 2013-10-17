@@ -83,6 +83,8 @@ int write_default_config (void)
     fputs("Mouse                = true\n", configfile);
     fputs("Quiet_Macros         = true\n", configfile);
     fputs("Select_Starsign      = true\n", configfile);
+    fputs("Enable_Autosave      = true\n", configfile);
+    fputs("Enable_Reroller      = true\n", configfile);
     fputs("Short_Alchemy        = false\n", configfile);
     fputs("Short_Named_Monsters = true\n", configfile);
     fputs("Spell_Stats          = false\n", configfile);
@@ -286,6 +288,8 @@ int read_config (void)
     config->fix_typos = 1;
     config->more_weapon_stats = 1;
     config->select_starsign = 1;
+    config->enable_autosave = 1;
+    config->enable_reroller = 1;
     config->short_alchemy = 0;
     config->short_named_monsters = 1;
     config->spell_stats = 1;
@@ -404,6 +408,16 @@ int read_config (void)
             config->select_starsign = (strcasecmp(param_value, "true") == 0);
         }
 
+        if (strcasecmp(param_name, "enable_autosave") == 0)
+        {
+            config->enable_autosave = (strcasecmp(param_value, "true") == 0);
+        }
+
+        if (strcasecmp(param_name, "enable_reroller") == 0)
+        {
+            config->enable_reroller = (strcasecmp(param_value, "true") == 0);
+        }
+
         if (strcasecmp(param_name, "spell_stats") == 0)
         {
             config->spell_stats = (strcasecmp(param_value, "true") == 0);
@@ -520,6 +534,16 @@ int read_config (void)
     {
         log(log_config, "Config: ADOM version not 1.1.0, disabling flg fix.\n");
         config->fix_flgs = 0;
+    }
+
+    if ((adom_version != 111) && (config->enable_autosave != 0)) {
+	log(log_config, "Config: ADOM version not 1.1.1, disabling autosaver.\n");
+	config->enable_autosave = 0;
+    }
+
+    if ((adom_version != 111) && (config->enable_reroller != 0)) {
+	log(log_config, "Config: ADOM version not 1.1.1, disabling char reroller.\n");
+	config->enable_reroller = 0;
     }
 
     return 1;

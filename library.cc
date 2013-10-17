@@ -201,8 +201,10 @@ void initialize()
     if (config->select_starsign) {
       inject_my_starsign();
     }
-    if (adom_version == 111) {
+    if (config->enable_autosave) {
       inject_autosaver();
+    }
+    if (config->enable_reroller) {
       inject_roller();
     }
     //init_help();

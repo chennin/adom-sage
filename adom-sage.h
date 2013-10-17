@@ -156,6 +156,8 @@ struct Config
     int mindcraft_stats;     // Show mindcraft damage, etc.
     int more_weapon_stats;   // Augment weapon stats display
     int select_starsign;     // Select starsign or not
+    int enable_autosave;     // Enable autosave or not
+    int enable_reroller;     // Enable char reroller or not
     int short_alchemy;       // Shorten alchemy display
     int short_named_monsters;// Shorten named monsters' titles
     int spell_stats;         // Show spell range, duration, etc.

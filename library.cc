@@ -203,6 +203,7 @@ void initialize()
     }
     if (adom_version == 111) {
       inject_autosaver();
+      inject_roller();
     }
     //init_help();
     // read_keymaps checks that ADOM is configured; we want to ensure that

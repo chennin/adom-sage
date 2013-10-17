@@ -27,8 +27,6 @@ int get_version() {
 // Called after Sage's config is read
 void inject_my_starsign(void) {
 	uint32_t INJECT_STARSIGN = 0, STAROFF = 0;
-//	int INJECT_STAT = 0, STATOFF = 0;
-
 	int adom_version = get_version();
 
 	/*
@@ -87,23 +85,13 @@ void inject_my_starsign(void) {
 	}
 
 	STAROFF = INJECT_STARSIGN + 4;
-//	STATOFF = INJECT_STAT + 4;
 	
-	// try to load user's saved requirements
-	//  load_requirements();
-
-	// roller's item list
-	//  load_item_list();
 	if(
-			//     mprotect(PAGEBOUND(0x080756C4), getpagesize(), RWX_PROT) ||
 			mprotect(PAGEBOUND(INJECT_STARSIGN), getpagesize(), RWX_PROT) /* starsign */
 	  ) {
 		perror("mprotect()");
 		exit(1);
 	}
-
-	// inject stat roller
-	//  *((void**)0x080756C4) = &roll_start - 0x080756C8;
 
 	// inject starsign selector
         *((char**)INJECT_STARSIGN) = ((char*)(&starsign_select)) - STAROFF;
@@ -127,4 +115,27 @@ void inject_autosaver(void) {
                 // inject autosaver - on 'S' command
                 *((char**)0x08090735) = ((char*)(&save_hook)) - 0x08090739;
         }
+}
+
+void inject_roller(void) {
+	int adom_version = get_version();
+	// try to load user's saved requirements
+	load_requirements();
+
+	// roller's item list
+	load_item_list();
+
+        if(
+                        /* For now, roller only works with 1.1.1. #define out addresses later. */
+			mprotect(PAGEBOUND(0x080756C4), getpagesize(), RWX_PROT) /* roller */
+          ) {
+                perror("mprotect()");
+                exit(1);
+        }
+
+        if (adom_version == 111) {
+		// inject stat roller
+		*((char**)0x080756C4) = ((char*)(&roll_start)) - 0x080756C8;
+        }
+
 }

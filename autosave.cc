@@ -43,7 +43,8 @@ static int autosave(int patch_really_save) {
     char new_path[2048];
     
     snprintf(svg_path, 2048, "%s/.adom.data/savedg/%s", getpwuid(getuid())->pw_dir, get_svg_name());
-    snprintf(new_path, 2048, "%s/.adom.data/savedg/%s.backup", getpwuid(getuid())->pw_dir, get_svg_name());    
+    // TODO: change 111 when support for other versions is added
+    snprintf(new_path, 2048, "%s/backup-111/%s", getpwuid(getuid())->pw_dir, get_svg_name());    
     
     if(!rename(svg_path, new_path))
       adom_msg("NOTICE: backup .svg created!");

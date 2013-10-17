@@ -11,7 +11,7 @@ static void trim_end(char *s) {
 void load_item_list() {
   memset(item_list, 0, ITEMS*ITEMSTRSZ);
 
-  FILE *fp = fopen("/var/lib/adom/server/item_list_111.txt", "r");
+  FILE *fp = fopen("/var/lib/adom/item_list_111.txt", "r");
   if(!fp) fp = fopen("item_list_111.txt", "r");  
   if(!fp) return;
 

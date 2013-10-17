@@ -60,7 +60,7 @@ void command_hook() {
   static unsigned int last_save_turn = 0;
 
   // time for autobackup?
-  if(TURNCOUNTER != last_save_turn && !(TURNCOUNTER % 1000))
+  if(TURNCOUNTER >= last_save_turn + 1000)
     if(autosave(1))
       last_save_turn = TURNCOUNTER; // in parent
     

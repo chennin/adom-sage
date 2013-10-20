@@ -546,6 +546,14 @@ int read_config (void)
 	config->enable_reroller = 0;
     }
 
+    if (adom_version >= 12017) {
+      log(log_config, "Config: ADOM version 1.2.0p17 or greater detected.\n");
+      if (config->auto_swap_neutral != 0) {
+	log(log_config, "Config: `-- Disabling auto swap with neutrals.\n");
+        config->auto_swap_neutral = 0;
+      }
+    }
+
     return 1;
 }
 

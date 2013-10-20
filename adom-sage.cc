@@ -692,7 +692,7 @@ void StateLocate::handle_cmd(WINDOW *win, Command cmd)
         macro_queue->push_string(config->macro[cmd - cmdMacro0]);
     }
 
-    else if (cmd == cmdAscend || cmd == cmdDescend)
+    else if ((cmd == cmdAscend || cmd == cmdDescend) && (get_version() < 12017))  // Pressing </> to move cursor to stairs is built in to 1.2.017+
     {
         int y, x;
         chtype ch;

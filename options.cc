@@ -552,6 +552,10 @@ int read_config (void)
 	log(log_config, "Config: `-- Disabling auto swap with neutrals.\n");
         config->auto_swap_neutral = 0;
       }
+      if (config->mindcraft_stats != 0) {
+	log(log_config, "Config: `-- Disabling mindcraft stats.\n");
+        config->mindcraft_stats = 0;
+      }
     }
 
     return 1;

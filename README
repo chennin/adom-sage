@@ -1,4 +1,4 @@
-README FILE for ADOM Sage version 0.9.14
+README FILE for ADOM Sage version 0.9.15
 A frontend for ADOM 1.0.0, 1.1.1, and 1.2.0pX
 ADOM Sage is Copyright (c) 2002 by Josh Kelley
 ADOM Sage is Copyright (c) 2013 by Christopher Henning
@@ -104,7 +104,8 @@ Blank lines and lines starting with '#' are ignored.
 Details on the different options:
 
 Auto_Swap_Neutral: If true, automatically swap places with neutral
-monsters instead of asking if you wish to attack them.
+monsters instead of asking if you wish to attack them (note: disabled for ADOM
+1.2.0p17+).
 
 Cursor_Style: Alters how the cursor is displayed.  The following options
 are allowed:
@@ -152,7 +153,8 @@ Macro_0 through Macro_9 and Macro_A through Macro_Z: Defines any number of
 macros for use in ADOM Sage.  See the section on macros for details.
 
 Mindcraft_Stats: If true, display information on the current effectiveness
-of various abilities on the Invoke Mindcraft screen.
+of various abilities on the Invoke Mindcraft screen. (note: disabled for ADOM
+1.2.0p17+)
 
 More_Weapon_Stats: If true, the various 'display weapon statistics'
 commands ('W', 'K', and 'M') display damages as (min-max, avg) format
@@ -184,6 +186,11 @@ Flames.
 
 The sage.msg file - Color-coding Messages
 -----------------------------------------
+
+NOTE: As of ADOM 1.2.0p17, these features are built into ADOM directly. Use
+adom.msg instead of sage.msg to avoid duplicate processing, config file
+confusion, and oddly colored messages.
+
 The sage.msg file configures how messages are color-coded.  You can also
 define special handling for certain messages, as described below.
 
@@ -329,7 +336,8 @@ Repeat last command (default key: '): Repeats the sequence of keys that
 you pressed to enter your last command.  For example, if you tried to
 pickpocket an enemy to the south on your previous turn, then issue this
 command, you will again attempt to pickpocket an enemy to the south.
-If your opponent to the south moved, then you'll miss.
+If your opponent to the south moved, then you'll miss (note: disabled for ADOM
+1.2.0p17+).
 
 Set dynamic display to x: ADOM allows you to cycle through the various
 settings for the dynamic display (in the lower right corner of the
@@ -345,7 +353,8 @@ Default keys for these commands:
 ADOM Sage also adds additional functionality to a couple of ADOM's
 commands.  While selecting a location for a controlled teleport, if
 you press < or > (or whatever keys you have bound to the ascend/descend
-commands), ADOM Sage will move the cursor to the next visible staircase.
+commands), ADOM Sage will move the cursor to the next visible staircase (note:
+disabled for ADOM 1.2.0p17+).
 
 
 Macros

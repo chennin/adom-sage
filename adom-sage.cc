@@ -43,6 +43,9 @@ int get_version() {
 
 inline bool is_sage_cmd(Command cmd)
 {
+    if (get_version() >= 12017) { // RPT built in to 1.2.0p17+
+        return cmd > cmdRepeat;
+    }
     return cmd > cmdTarget;
 }
 
@@ -590,7 +593,9 @@ void StateRunning::handle_cmd(WINDOW *win, Command cmd)
 
             // Sage-specific commands
         case cmdRepeat:
-            key_queue->push_queue(*prev_keys);
+	    if (get_version() < 12017) { // Repeat is built in to ADOM 1.2.0p17+
+	      key_queue->push_queue(*prev_keys);
+	    }
             break;
 
         case cmdDynamicDisplaySpeed:

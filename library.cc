@@ -178,16 +178,6 @@ void initialize()
         }
     }
 
-    // Get ADOM version number
-    char *version = getenv("ADOM_VERSION");
-    adom_version = 0;
-
-    if (version != NULL)
-    {
-        sscanf(version, "%i", &adom_version);
-        log(log_config, "ADOM version: %i\n", adom_version);
-    }
-
     // Read configuration files; perform other initialization
     result = 1;
     init_io();

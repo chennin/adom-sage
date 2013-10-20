@@ -171,10 +171,6 @@ typedef enum
 } Command;
 const int numCommands = cmdMacroZ + 1;
 
-inline bool is_sage_cmd(Command cmd)
-{
-    return cmd > cmdTarget;
-}
 inline bool is_macro(Command cmd)
 {
     return (cmd >= cmdMacro0 && cmd <= cmdMacroZ);

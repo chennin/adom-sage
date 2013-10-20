@@ -6,13 +6,7 @@ void starsign_select() {
 	uint32_t JUMP_TO = 0;
 
 	// Get ADOM version number, set by Sage
-	char *version = getenv("ADOM_VERSION");
-	int adom_version = 0;
-
-	if (version != NULL)
-	{
-		sscanf(version, "%i", &adom_version);
-	}
+	int adom_version = get_version();
 
 	/*
 	BIRTHSIGN_ADDR is the place in memory where the day of birth is stored.

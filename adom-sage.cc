@@ -29,6 +29,22 @@ AttrMap *attr_map;
 FILE *log_file;
 int log_level = 1;
 
+int get_version() {
+        // Get ADOM version number, set by Sage
+        char *version = getenv("ADOM_VERSION");
+        int adom_version = 0;
+
+        if (version != NULL)
+        {
+                sscanf(version, "%i", &adom_version);
+        }
+        return adom_version;
+}
+
+inline bool is_sage_cmd(Command cmd)
+{
+    return cmd > cmdTarget;
+}
 
 /*---------------------------------------------------------------------------
  * Game status functions

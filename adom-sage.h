@@ -23,6 +23,7 @@
 class State;
 class StateCmdProcessor;
 
+int get_version();
 
 /*---------------------------------------------------------------------------
  * System-dependent stuff - library functions that we replace, non-ANSI

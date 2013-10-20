@@ -12,18 +12,6 @@ pid_t try_fork() {
   return forkpid;
 }
 
-int get_version() {
-        // Get ADOM version number, set by Sage
-        char *version = getenv("ADOM_VERSION");
-        int adom_version = 0;
-
-        if (version != NULL)
-        {
-                sscanf(version, "%i", &adom_version);
-        }
-	return adom_version;
-}
-
 // Called after Sage's config is read
 void inject_my_starsign(void) {
 	uint32_t INJECT_STARSIGN = 0, STAROFF = 0;

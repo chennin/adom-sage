@@ -25,6 +25,7 @@
 // Align address to page boundary
 #define PAGEBOUND(p) ((void*)((p) - (p)%getpagesize()))
 
+int get_version();
 void inject_my_starsign();
 void inject_autosaver();
 void inject_roller();

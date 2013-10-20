@@ -564,6 +564,8 @@ int read_msg_maps (void)
 {
     string mapfilename;
     FILE *mapfile;
+    string adommsgname;
+    FILE *adommsg;
     char line[255];
     char *delim_pos;
     char *subst;
@@ -576,22 +578,46 @@ int read_msg_maps (void)
 
     regex_map = new RegexMap;
 
+    // Look for sage.msg
     mapfilename = *config_path + "/sage.msg";
     mapfile = fopen(mapfilename.c_str(), "r");
 
-    if (mapfile == NULL)
+    // Look for adom.msg (1.2.0p17+)
+    adommsgname = *config_path + "/adom.msg";
+    adommsg = fopen(adommsgname.c_str(), "r");
+
+    if (mapfile == NULL) // No existing sage.msg ...
     {
-        if (!write_default_msg_map())
-        {
-            return 0;
-        }
+	if (adommsg == NULL) // ... And no adom.msg: create sage.msg
+	{
+          // Write out default sage.msg
+          if (!write_default_msg_map())
+          {
+              return 0;
+          }
 
-        mapfile = fopen(mapfilename.c_str(), "r");
+          mapfile = fopen(mapfilename.c_str(), "r");
 
-        if (mapfile == NULL)
-        {
-            return sage_error ("Something very strange happened-still can't read message map");
-        }
+          if (mapfile == NULL)
+          {
+              return sage_error ("Something very strange happened-still can't read message map");
+          }
+	}
+	else // ... And yes adom.msg: don't create default map
+	{
+	  log(log_config, "Msgmap: adom.msg exists, not creating default sage.msg\n");
+	  return 1;
+	}
+    }
+    else // Existing sage.msg ...
+    {
+      if ((adommsg != NULL) && (get_version() >= 12017)) // ... And existing adom.msg and version > 1.2.0p17
+      {
+	log(log_config, "Msgmap: adom.msg and sage.msg exist, beware of conflicts\n");
+        printf("WARNING: sage.msg and adom.msg both exist. Since 1.2.0p17, ADOM supports the\n"
+               "same features Sage does in sage.msg. Be careful of duplicate directives in\n"
+               "the .msg files.\n");
+      }
     }
 
     while (!feof(mapfile))

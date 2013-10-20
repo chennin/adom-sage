@@ -11,8 +11,6 @@
 
 #include "adom-sage.h"
 
-int adom_version;
-
 Config *config;
 MsgMap *main_msgmap;
 MsgMap *regex_msgmap;
@@ -525,6 +523,7 @@ int read_config (void)
     }
 
     // Version-specific processing
+    int adom_version = get_version();
     if ((adom_version != 100) && (config->spell_stats != 0))
     {
         config->spell_stats = 0;

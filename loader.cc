@@ -23,10 +23,10 @@ void inject_my_starsign(void) {
 	 for information on finding these offsets.
 	*/
 	if (adom_version == 111) {
-		INJECT_STARSIGN = 0x813ee0a; 
+		INJECT_STARSIGN = 0x813ee0a;
 	}
 	else if (adom_version == 100) {
-		INJECT_STARSIGN = 0x813ac6a; 
+		INJECT_STARSIGN = 0x813ac6a;
 	}
 	else if (adom_version == 1203) {
                 INJECT_STARSIGN =  0x081387ba;
@@ -79,7 +79,7 @@ void inject_my_starsign(void) {
 	}
 
 	STAROFF = INJECT_STARSIGN + 4;
-	
+
 	if(
 			mprotect(PAGEBOUND(INJECT_STARSIGN), getpagesize(), RWX_PROT) /* starsign */
 	  ) {
@@ -92,44 +92,67 @@ void inject_my_starsign(void) {
 }
 
 void inject_autosaver(void) {
+    uint32_t COMMAND_ADDR = 0, SAVE_ADDR = 0;
 	int adom_version = get_version();
-        if(
-                        /* For now, autosave only works with 1.1.1. #define out addresses later. */
-                        mprotect(PAGEBOUND(0x0808f990), getpagesize(), RWX_PROT) || /* autosave command_hook */
-                        mprotect(PAGEBOUND(0x08090735), getpagesize(), RWX_PROT) /* autosave save_hook */
-          ) {
-                perror("mprotect()");
-                exit(1);
-        }
 
-        if (adom_version == 111) {
-                // inject autosaver - every 1000 turn
-                *((char**)0x0808f990) = ((char*)(&command_hook)) - 0x0808f994;
+    if (adom_version == 111) {
+		COMMAND_ADDR = 0x0808F990;
+		SAVE_ADDR = 0x08090735;
+	}
+	else if (adom_version == 12018) {
+		COMMAND_ADDR = 0x0808A6FE;
+		SAVE_ADDR = 0x0808AEA8;
+	}
+	else {
+		printf("Don't know where to inject autosaver. Unknown ADOM version %i ?\n", adom_version);
+		return;
+	}
 
-                // inject autosaver - on 'S' command
-                *((char**)0x08090735) = ((char*)(&save_hook)) - 0x08090739;
-        }
+    if(
+        mprotect(PAGEBOUND(COMMAND_ADDR), getpagesize(), RWX_PROT) || /* autosave command_hook */
+        mprotect(PAGEBOUND(SAVE_ADDR), getpagesize(), RWX_PROT) /* autosave save_hook */
+    ) {
+        perror("mprotect()");
+        exit(1);
+    }
+
+    // inject autosaver - every 1000 turn
+    *((char**)COMMAND_ADDR) = ((char*)(&command_hook)) - COMMAND_ADDR - 4;
+
+    // inject autosaver - on 'S' command
+    *((char**)SAVE_ADDR) = ((char*)(&save_hook)) - SAVE_ADDR - 4;
+
 }
 
 void inject_roller(void) {
+    uint32_t ROLL_ADDR = 0;
 	int adom_version = get_version();
+
+    if (adom_version == 111) {
+		ROLL_ADDR = 0x080756C4;
+	}
+	else if (adom_version == 12018) {
+		ROLL_ADDR = 0x0807DB03;
+	}
+	else {
+		printf("Don't know where to inject roller. Unknown ADOM version %i ?\n", adom_version);
+		return;
+	}
+
 	// try to load user's saved requirements
 	load_requirements();
 
 	// roller's item list
 	load_item_list();
 
-        if(
-                        /* For now, roller only works with 1.1.1. #define out addresses later. */
-			mprotect(PAGEBOUND(0x080756C4), getpagesize(), RWX_PROT) /* roller */
-          ) {
-                perror("mprotect()");
-                exit(1);
-        }
+    if(
+        mprotect(PAGEBOUND(ROLL_ADDR), getpagesize(), RWX_PROT) /* roller */
+    ) {
+        perror("mprotect()");
+        exit(1);
+    }
 
-        if (adom_version == 111) {
-		// inject stat roller
-		*((char**)0x080756C4) = ((char*)(&roll_start)) - 0x080756C8;
-        }
+    // inject stat roller
+    *((char**)ROLL_ADDR) = ((char*)(&roll_start)) - ROLL_ADDR - 4;
 
 }

@@ -535,13 +535,13 @@ int read_config (void)
         config->fix_flgs = 0;
     }
 
-    if ((adom_version != 111) && (config->enable_autosave != 0)) {
-	log(log_config, "Config: ADOM version not 1.1.1, disabling autosaver.\n");
+    if ((adom_version != 111) && (adom_version != 12018) && (config->enable_autosave != 0)) {
+	log(log_config, "Config: ADOM version not 1.1.1 or 1.2.0p18, disabling autosaver.\n");
 	config->enable_autosave = 0;
     }
 
-    if ((adom_version != 111) && (config->enable_reroller != 0)) {
-	log(log_config, "Config: ADOM version not 1.1.1, disabling char reroller.\n");
+    if ((adom_version != 111) && (adom_version != 12018) && (config->enable_reroller != 0)) {
+	log(log_config, "Config: ADOM version not 1.1.1 or 1.2.0p18, disabling char reroller.\n");
 	config->enable_reroller = 0;
     }
 
@@ -679,7 +679,7 @@ int read_msg_maps (void)
             {
                 cur_msgmap = main_msgmap;
             }
-            
+
             else if (strcasecmp(line, ":replace") == 0)
             {
                 attr = A_NORMAL;
@@ -704,7 +704,7 @@ int read_msg_maps (void)
                 subst = strdup(delim_pos + 1);
                 *delim_pos = '\0';
             }
-            
+
             log(log_config, "Msgmap: %i %i %i %i %s\n", no_skip,
                 (int) attr, (int) color, (int) suppress, line);
             iter = cur_msgmap->find(line);

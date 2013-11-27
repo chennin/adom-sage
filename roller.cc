@@ -1,17 +1,9 @@
 #include "jaakkos.h"
 
-/* For now, roller only works with 1.1.1. #define out addresses later. */
-
 extern char item_list[ITEMS][ITEMSTRSZ];
 
-char *ask_patch_1 = (char *)0x080756e1;
-char *ask_patch_2 = (char *)0x0807571b;
-
-unsigned char patch_2_instructions[] = {0x90, 0x90, 0x90, 0x90,
-                                        0x90, 0x83, 0xc4, 0xf4,
-                                        0x68, 0x8e, 0xdd, 0x15,
-                                        0x08, 0xb0, 0x52, 0x90,
-                                        0x90, 0x90};
+unsigned char patch_3_instructions[] = {0xB0, 0x52, 0x90, 0x90, 0x90};
+unsigned char talent_instructions[] = {0x56, 0x90, 0x90};
 
 #define MAX_ROLLS 1000
 #define BEST_ROLLS 16
@@ -34,16 +26,24 @@ int item_requirements = 0x0;// 0x0 for nothing, 0x1...0x2b9 for items, 0x2ba...0
 
 RollerShared *shm;
 
-uint16_t *rng = (uint16_t *)0x082ada40;
-int *stats = (int *)0x082b1728;
-int *items = (int *)0x082a5980;
-int *books = (int *)0x082a7e00;
-
 const char stat_names[][3] = {"St", "Le", "Wi", "Dx", "To", "Ch", "Ap", "Ma", "Pe"};
 
 static void reseed_rng() {
-  for (int i=0; i < (0x100/2); i++)
-    rng[i] = rand();
+  uint16_t *rng111 = (uint16_t *)0x082ada40;
+  uint16_t *rng12018 = (uint16_t *)0x082CEBA0;
+  int adom_version = get_version();
+  if (adom_version == 111) {
+    for (int i=0; i < (0x100/2); i++)
+      rng111[i] = rand();
+  }
+  else if (adom_version == 12018) {
+    for (int i=0; i < (0x100/2); i++)
+      rng12018[i] = rand();
+  }
+  else {
+    printf("Don't know where to inject roller. Unknown ADOM version %i ?\n", adom_version);
+    return;
+  }
 }
 
 void load_requirements() {
@@ -212,38 +212,102 @@ static int sqerr(int *data) {
 }
 
 // children end up here
-static void roll_end(void *a, void *b, void *c, unsigned int ntalents) {
-  memcpy(shm->stats, stats, 0x9*sizeof(int));
-  memcpy(shm->items, items, 0x2b9*sizeof(int));
-  memcpy(shm->items+0x2b9, books, 0x2f*sizeof(int));
-  shm->talents = ntalents;
+static void roll_end(unsigned int talents18, void *b, void *c, unsigned int ntalents) {
+  uint32_t STATS_ADDR = 0, ITEMS_ADDR = 0, BOOKS_ADDR = 0;
+  int adom_version = get_version();
+
+  if (adom_version == 111) {
+    STATS_ADDR = 0x082b1728;
+    ITEMS_ADDR = 0x082a5980;
+    BOOKS_ADDR = 0x082a7e00;
+  }
+  else if (adom_version == 12018) {
+    STATS_ADDR = 0x082DBA7C;
+    ITEMS_ADDR = 0x082C6080;
+    BOOKS_ADDR = 0x082C7B60;
+  }
+  else {
+    printf("Don't know where to inject roller. Unknown ADOM version %i ?\n", adom_version);
+    return;
+  }
+
+  memcpy(shm->stats, (void*)STATS_ADDR, 0x9*sizeof(int));
+  memcpy(shm->items, (void*)ITEMS_ADDR, 0x2b9*sizeof(int));
+  memcpy(shm->items+0x2b9, (void*)BOOKS_ADDR, 0x2f*sizeof(int));
+  if (adom_version == 12018) {
+    shm->talents = talents18;
+  }
+  else {
+    shm->talents = ntalents;
+  }
   exit(EXIT_SUCCESS);
 }
 
 static void child() {
+  uint32_t PATCH1_ADDR = 0, PATCH2_ADDR = 0, PATCH3_ADDR = 0, CNT_ADDR = 0, TALENT_ADDR = 0, ROLLEND_ADDR = 0, RESUME_ADDR = 0;
+  int adom_version = get_version();
+
+  if (adom_version == 111) {
+    PATCH1_ADDR = 0x080756e1;
+    PATCH2_ADDR = 0x0807571b;
+    PATCH3_ADDR = 0x08075728;
+    CNT_ADDR = 0x0814a86e;
+    ROLLEND_ADDR = 0x0814ec49;
+    RESUME_ADDR = 0x08073970;
+  }
+  else if (adom_version == 12018) {
+    PATCH1_ADDR = 0x0807DB25;
+    PATCH2_ADDR = 0x0807DB5A;
+    PATCH3_ADDR = 0x0807DB66;
+    CNT_ADDR = 0x0807BB95;
+    TALENT_ADDR = 0x0815CBE1;
+    ROLLEND_ADDR = 0x0815CBE5;
+    RESUME_ADDR = 0x0807C7B0;
+  }
+  else {
+    printf("Don't know where to inject roller. Unknown ADOM version %i ?\n", adom_version);
+    return;
+  }
+
   close(STDOUT_FILENO);
   close(STDIN_FILENO);
 
-  if (mprotect(PAGEBOUND(0x080756e1), getpagesize(), RWX_PROT) ||
-      mprotect(PAGEBOUND(0x0807571b), getpagesize(), RWX_PROT) ||
-      mprotect(PAGEBOUND(0x0814a86e), getpagesize(), RWX_PROT) ||
-      mprotect(PAGEBOUND(0x0814ec49), getpagesize(), RWX_PROT)) {
+  if (mprotect(PAGEBOUND(PATCH1_ADDR), getpagesize(), RWX_PROT) ||
+      mprotect(PAGEBOUND(PATCH2_ADDR), getpagesize(), RWX_PROT) ||
+      mprotect(PAGEBOUND(PATCH3_ADDR), getpagesize(), RWX_PROT) ||
+      mprotect(PAGEBOUND(ROLLEND_ADDR), getpagesize(), RWX_PROT) ||
+      mprotect(PAGEBOUND(RESUME_ADDR), getpagesize(), RWX_PROT) ||
+      mprotect(PAGEBOUND(CNT_ADDR), getpagesize(), RWX_PROT)) {
     perror("mprotect");
     exit(1);
   }
 
   // don't stop waiting for useless input in roller
-  memset(ask_patch_1, 0x90, 5);
-  memcpy(ask_patch_2, patch_2_instructions, sizeof(patch_2_instructions));
+  memset((void*)PATCH1_ADDR, 0x90, 5);
+  memset((void*)PATCH2_ADDR, 0x90, 5);
+  memcpy((void*)PATCH3_ADDR, patch_3_instructions, sizeof(patch_3_instructions));
+  // don't write .cnt
+  if (adom_version == 111) {
+    *((uint16_t *)CNT_ADDR) = 0x71eb;
+  }
+  else if (adom_version == 12018) {
+    memset((void*)CNT_ADDR, 0x90, 5);
+    if (mprotect(PAGEBOUND(TALENT_ADDR), getpagesize(), RWX_PROT)) {
+      perror("mprotect");
+      exit(1);
+    }
+    memcpy((void*)TALENT_ADDR, talent_instructions, sizeof(talent_instructions));
+  }
+  else {
+    printf("Don't know where to inject roller. Unknown ADOM version %i ?\n", adom_version);
+    return;
+  }
 
   // patch roll end
-  *((char**)0x0814ec49) = ((char*)(&roll_end)) - 0x0814ec4d;
-
-  // don't write .cnt
-  *((uint16_t *)0x0814a86e) = 0x71eb;
+  *((char**)ROLLEND_ADDR) = ((char*)(&roll_end)) - ROLLEND_ADDR - 4;
 
   // resume ADoM
-  ((void(*)())0x08073970)();
+  ((void(*)())RESUME_ADDR)();
   return;
 }
 
@@ -298,6 +362,19 @@ static void display_roll_status(RollResult *best_rolls, int rolln, int max_rolls
 #define BETTER_THAN(i) ((!item_requirements || shm->items[item_requirements-1] == best_rolls[(i)].items[item_requirements-1]) ? sqerr(shm->stats) <= sqerr(best_rolls[(i)].stats) : shm->items[item_requirements-1])
 
 static int process_roll_result(RollResult *best_rolls) {
+  uint32_t RNG_ADDR = 0;
+  int adom_version = get_version();
+  if (adom_version == 111) {
+    RNG_ADDR = 0x082ada40;
+  }
+  else if (adom_version == 12018) {
+    RNG_ADDR = 0x082CEBA0;
+  }
+  else {
+    printf("Don't know where to inject roller. Unknown ADOM version %i ?\n", adom_version);
+    return 2;
+  }
+
   if (BETTER_THAN(BEST_ROLLS-1)) {
     int pos = BEST_ROLLS-1;
 
@@ -306,7 +383,7 @@ static int process_roll_result(RollResult *best_rolls) {
       pos--;
     }
 
-    memcpy(best_rolls[pos].rng, rng, 0x100);
+    memcpy(best_rolls[pos].rng, (void*)RNG_ADDR, 0x100);
     memcpy(best_rolls[pos].stats, shm->stats, 0x9*sizeof(int));
     memcpy(best_rolls[pos].items, shm->items, (0x2b9+0x2f)*sizeof(int));
     best_rolls[pos].talents = shm->talents;
@@ -330,6 +407,22 @@ static void reset_best(RollResult *best_rolls) {
 }
 
 void roll_start() {
+  uint32_t RESUME_ADDR, RNG_ADDR = 0;
+  int adom_version = get_version();
+
+  if (adom_version == 111) {
+    RNG_ADDR = 0x082ada40;
+    RESUME_ADDR = 0x08073970;
+  }
+  else if (adom_version == 12018) {
+    RNG_ADDR = 0x082CEBA0;
+    RESUME_ADDR = 0x0807C7B0;
+  }
+  else {
+    printf("Don't know where to inject roller. Unknown ADOM version %i ?\n", adom_version);
+    return;
+  }
+
   unsigned int rolln = 0;
   unsigned int max_rolls = MAX_ROLLS;
   RollResult best_rolls[BEST_ROLLS];
@@ -373,7 +466,7 @@ void roll_start() {
     }
 
     roll_failed = (rolln == max_rolls);
-    memcpy(rng, best_rolls[0].rng, 0x100);
+    memcpy((void*)RNG_ADDR, best_rolls[0].rng, 0x100);
   }
 
   shm_deinit(shm);
@@ -381,5 +474,5 @@ void roll_start() {
   // resume ADoM
   printf("\033[2J\033[3;3H");
   fflush(stdout);
-  ((void(*)())0x08073970)();
+  ((void(*)())RESUME_ADDR)();
 };

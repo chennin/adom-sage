@@ -93,10 +93,15 @@ static int autosave(int patch_really_save) {
 
     char* (*get_svg_name)() = (char*(*)())SVG_ADDR;
     char svg_path[2048];
+    char bk_dir[1024];
     char new_path[2048];
 
     snprintf(svg_path, 2048, "%s/.adom.data/savedg/%s", getpwuid(getuid())->pw_dir, get_svg_name());
-    snprintf(new_path, 2048, "%s/backup-%u/%s", getpwuid(getuid())->pw_dir, adom_version, get_svg_name());
+    snprintf(bk_dir, 1024, "%s/.adom.data/backup/", getpwuid(getuid())->pw_dir);
+    if (mkdir(bk_dir, S_IRWXU|S_IRGRP|S_IXGRP|S_IXOTH|S_IROTH) != 0) {
+      if (errno != EEXIST) { perror("mkdir() error"); }
+    }
+    snprintf(new_path, 2048, "%s/%s", bk_dir, get_svg_name());
 
     if(!rename(svg_path, new_path)) {
       adom_msg("NOTICE: backup .svg created!");

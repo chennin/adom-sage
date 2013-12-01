@@ -76,6 +76,9 @@ void inject_my_starsign(void) {
 	else if (adom_version == 12019) {
                 INJECT_STARSIGN = 0x814a49a;
         }
+	else if (adom_version == 12020) {
+                INJECT_STARSIGN = 0x814A49A;
+        }
 	if (INJECT_STARSIGN == 0) {
 		printf("Don't know where to inject a function to.  Unknown ADOM version %i ?\n", adom_version);
 		return;

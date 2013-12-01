@@ -89,6 +89,10 @@ void starsign_select() {
 		BIRTHSIGN_ADDR = 0x82e27fc;
 		JUMP_TO = 0x814a3b0;
 	}
+	else if (adom_version == 12020) {
+		BIRTHSIGN_ADDR = 0x82E277C;
+		JUMP_TO = 0x814a3b0;
+	}
 	if ((BIRTHSIGN_ADDR == 0) || (JUMP_TO == 0)) {
 		printf("Don't know where to put the birth date or jump to.  Unknown ADOM version %i ?\n", adom_version);
 		return;

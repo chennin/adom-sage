@@ -101,24 +101,24 @@ void starsign_select() {
 	do {
 		printf("\033[2J\033[1;1H");
 
-		printf("Select the month of your birth:\r\n"
+		printf("\r\n\r\n\tSelect the month of your birth:\r\n"
 				"\r\n"
-				"  ? - random\r\n"
+				"\t\t [?] random\r\n"
 				"\r\n"
-				"  A - Raven\r\n"
-				"  B - Book\r\n"
-				"  C - Wand\r\n"
-				"  D - Unicorn\r\n"
-				"  E - Salamander\r\n"
-				"  F - Dragon\r\n"
-				"  G - Sword\r\n"
-				"  H - Falcon\r\n"
-				"  I - Cup\r\n"
-				"  J - Candle\r\n"
-				"  K - Wolf\r\n"
-				"  L - Tree\r\n"
+				"\t\t [a] Raven\r\n"
+				"\t\t [b] Book\r\n"
+				"\t\t [c] Wand\r\n"
+				"\t\t [d] Unicorn\r\n"
+				"\t\t [e] Salamander\r\n"
+				"\t\t [f] Dragon\r\n"
+				"\t\t [g] Sword\r\n"
+				"\t\t [h] Falcon\r\n"
+				"\t\t [i] Cup\r\n"
+				"\t\t [j] Candle\r\n"
+				"\t\t [k] Wolf\r\n"
+				"\t\t [l] Tree\r\n"
 				"\r\n"
-				"> ");
+				"\tYour choice: ");
 
 		fflush(stdout);
 		month = toupper(fgetc(stdin));

@@ -41,14 +41,21 @@ Please do not send RFEs (requests for enhancement) to Thomas based off
 
 
 Quick Start (Linux)
-------------------
+-------------------
 If you downloaded the source package, run make.
-Compiling requires 32-bit ncurses development files (eg lib32ncurses5-dev)
+
+Compiling requires the ncurses development files (perhaps called 
+libncurses5-dev). If on a 64-bit host, the package may be called 
+lib32ncurses5-dev, and a multilib g++ (e.g. g++-4.7-multilib) is also needed.
+
 The star sign selector in 1.2.0+ is only supported with the 32-bit Debian 
 versions
+
 Copy adom-sage and adom-sage.so to the same directory as adom.
 Whenever you wish to play ADOM, run adom-sage instead of adom.
+
 If your screen looks ugly, please see the section on Graphics.
+
 For more information on ADOM Sage's features or on how to enable or
 disable various features, read on.
 

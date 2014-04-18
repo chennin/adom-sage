@@ -112,7 +112,7 @@ Details on the different options:
 
 Auto_Swap_Neutral: If true, automatically swap places with neutral
 monsters instead of asking if you wish to attack them (note: disabled for ADOM
-1.2.0p17+).
+1.2.0p17 and 21+).
 
 Cursor_Style: Alters how the cursor is displayed.  The following options
 are allowed:

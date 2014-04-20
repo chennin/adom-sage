@@ -12,9 +12,6 @@ unsigned char ignore_yesno12018[] = {0x33, 0xC0, 0x40, 0x90,
 unsigned char press_q12018[] = {0xC7, 0x05, 0x70, 0x9C,
                                 0x2A, 0x08, 0x02, 0x00,
                                 0x00, 0x00, 0xC3};
-unsigned char press_q12020[] = {0xC7, 0x05, 0x90, 0xa7,
-				0x2a, 0x08, 0x02, 0x00,
-                                0x00, 0x00, 0xC3};
 
 static int autosave(int patch_really_save) {
 
@@ -44,6 +41,14 @@ static int autosave(int patch_really_save) {
       QUIT_ADDR = 0x0807d810;
       RETURN_ADDR = 0x90a72a08;
     }
+    else if (adom_version == 12021) {
+      REALLY_SAVE_ADDR = 0x0808e9a5;
+      SAVE_ADDR = 0x08309668;
+      SPACEBAR_ADDR = 0x0804b650;
+      TEMP_FILES_ADDR = 0x08136350;
+      QUIT_ADDR = 0x0807fe90;
+      RETURN_ADDR = 0x70ed2c08;
+    }
     else {
       printf("Don't know where to inject autosaver. Unknown ADOM version %i ?\n", adom_version);
       return 2;
@@ -63,7 +68,7 @@ static int autosave(int patch_really_save) {
       if (adom_version == 111) {
         memcpy((void*)REALLY_SAVE_ADDR, ignore_yesno111, sizeof(ignore_yesno111)); // no "really save"
       }
-      else if ((adom_version == 12018) || (adom_version == 12020)) {
+      else if ((adom_version == 12018) || (adom_version >= 12020)) {
         memcpy((void*)REALLY_SAVE_ADDR, ignore_yesno12018, sizeof(ignore_yesno12018));
       }
     }
@@ -72,7 +77,7 @@ static int autosave(int patch_really_save) {
     *((unsigned char*)SPACEBAR_ADDR) = 0xC3; // no hit spacebar to continue
     *((unsigned int*)TEMP_FILES_ADDR) = 0x00c3c031; // don't remove temp files
 
-    if ((adom_version == 12018) || (adom_version == 12020)) {
+    if ((adom_version == 12018) || (adom_version >= 12020)) {
       if(mprotect(PAGEBOUND(QUIT_ADDR), getpagesize(), RWX_PROT)) {
         perror("mprotect()");
         exit(1);
@@ -99,6 +104,10 @@ static int autosave(int patch_really_save) {
     else if (adom_version == 12020) {
       SVG_ADDR = 0x080cdd30;
       MSG_ADDR = 0x0804b8a0;
+    }
+    else if (adom_version == 12021) {
+      SVG_ADDR = 0x080d4890;
+      MSG_ADDR = 0x0804c640;
     }
     else {
       printf("Don't know where to inject autosaver. Unknown ADOM version %i ?\n", adom_version);
@@ -143,6 +152,10 @@ void command_hook() {
     REFRESH_ADDR = 0x0804b440;
     TURN_ADDR = 0x082dc538;
   }
+  else if (adom_version == 12021) {
+    REFRESH_ADDR = 0x0804b800;
+    TURN_ADDR = 0x08302c38;
+  }
   else {
     printf("Don't know where to inject autosaver. Unknown ADOM version %i ?\n", adom_version);
     return;
@@ -168,6 +181,9 @@ int save_hook(char *msg, int a, char b) {
   }
   else if (adom_version == 12020) {
     PASK_ADDR = 0x0804c020;
+  }
+  else if (adom_version == 12021) {
+    PASK_ADDR = 0x0804c970;
   }
   else {
     printf("Don't know where to inject autosaver. Unknown ADOM version %i ?\n", adom_version);

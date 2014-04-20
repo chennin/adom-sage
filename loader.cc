@@ -113,6 +113,10 @@ void inject_autosaver(void) {
                 COMMAND_ADDR = 0x0808a77e;
                 SAVE_ADDR = 0x0808af28;
         }
+        else if (adom_version == 12021) {
+                COMMAND_ADDR = 0x0808e1c0;
+                SAVE_ADDR = 0x0808e9b5;
+        }
 	else {
 		printf("Don't know where to inject autosaver. Unknown ADOM version %i ?\n", adom_version);
 		return;
@@ -146,6 +150,9 @@ void inject_roller(void) {
 	}
         else if (adom_version == 12020) {
                 ROLL_ADDR = 0x0807db83;
+        }
+        else if (adom_version == 12021) {
+                ROLL_ADDR = 0x080800e5;
         }
 	else {
 		printf("Don't know where to inject roller. Unknown ADOM version %i ?\n", adom_version);

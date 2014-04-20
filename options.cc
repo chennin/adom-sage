@@ -535,17 +535,17 @@ int read_config (void)
         config->fix_flgs = 0;
     }
 
-    if ((adom_version != 111) && (adom_version != 12018) && (adom_version != 12020) && (config->enable_autosave != 0)) {
-	log(log_config, "Config: ADOM version not 1.1.1 or 1.2.0p18 or 1.2.0p20, disabling autosaver.\n");
+    if ((adom_version != 111) && (adom_version != 12018) && (adom_version != 12020) && (adom_version != 12021) && (config->enable_autosave != 0)) {
+	log(log_config, "Config: ADOM version not 1.1.1 or 1.2.0p18/20/21, disabling autosaver.\n");
 	config->enable_autosave = 0;
     }
 
-    if ((adom_version != 111) && (adom_version != 12018) && (adom_version != 12020) && (config->enable_reroller != 0)) {
-	log(log_config, "Config: ADOM version not 1.1.1 or 1.2.0p18 or 1.2.0p20, disabling char reroller.\n");
+    if ((adom_version != 111) && (adom_version != 12018) && (adom_version != 12020) && (adom_version != 12021) && (config->enable_reroller != 0)) {
+	log(log_config, "Config: ADOM version not 1.1.1 or 1.2.0p18/20/21, disabling char reroller.\n");
 	config->enable_reroller = 0;
     }
 
-    if ( ((adom_version == 12017) || (adom_version >= 12021)) && (config->auto_swap_neutral != 0)) {
+    if ( ((adom_version == 12017) || (adom_version >= 12021)) && (config->auto_swap_neutral != 0) ) {
         log(log_config, "Config: ADOM version 1.2.0p17 or 21+ detected, disabling auto swap with neutrals.\n");
         config->auto_swap_neutral = 0;
     }

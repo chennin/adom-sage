@@ -264,7 +264,7 @@ static void roll_end(unsigned int talents, void *b, void *c, unsigned int ntalen
 }
 
 static void child() {
-  uint32_t PATCH1_ADDR = 0, PATCH2_ADDR = 0, PATCH3_ADDR = 0, CNT_ADDR = 0, TALENT_ADDR = 0, ROLLEND_ADDR = 0, RESUME_ADDR = 0;
+  uint32_t PATCH1_ADDR = 0, PATCH2_ADDR = 0, PATCH3_ADDR = 0, CNT_ADDR = 0, TALENT_ADDR = 0, ROLLEND_ADDR = 0, RESUME_ADDR = 0, CORR_ADDR = 0;
   int adom_version = get_version();
 
   if (adom_version == 111) {
@@ -301,6 +301,7 @@ static void child() {
     TALENT_ADDR = 0x08168bc4;
     ROLLEND_ADDR = 0x08168bc8;
     RESUME_ADDR = 0x0807eb70;
+    CORR_ADDR = 0x0812E0C3;
   }
   else {
     printf("Don't know where to inject roller. Unknown ADOM version %i ?\n", adom_version);
@@ -318,6 +319,14 @@ static void child() {
       mprotect(PAGEBOUND(CNT_ADDR), getpagesize(), RWX_PROT)) {
     perror("mprotect");
     exit(1);
+  }
+  // don't prompt to see corruptions during child rolling
+  if (adom_version == 12021) {
+      if (mprotect(PAGEBOUND(CORR_ADDR), getpagesize(), RWX_PROT)) {
+        perror("mprotect");
+        exit(1);
+      }
+      memcpy((void*)CORR_ADDR, patch_3_instructions, sizeof(patch_3_instructions));
   }
 
   // don't stop waiting for useless input in roller

@@ -12,7 +12,7 @@
 
 #include "stl.h"
 
-#define SAGE_VERSION "0.9.19.1"
+#define SAGE_VERSION "0.9.20"
 
 // curses.h must come after STL stuff - PDCurses defines some macros that
 //   break MSVC's STL

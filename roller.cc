@@ -104,7 +104,7 @@ static void draw_ui(int stat_sel, unsigned char failed,
 
   for (int i=0; i < 0x9; i++)
     printf("%s - rolled %2d %s required %2d%s\r\n", stat_names[i],
-      best_rolls[0].stats[i], (best_rolls[0].stats[i] >= stat_requirements[i]) ? "and" : "but", stat_requirements[i], (stat_sel == i) ? " (selected)" : "");
+      best_rolls[0].stats[i], (best_rolls[0].stats[i] >= stat_requirements[i]) ? "and" : "\x1B[1;37mbut\x1B[0;37m", stat_requirements[i], (stat_sel == i) ? " (selected)" : "");
 
   printf("S - rolled %d total\r\n", +best_rolls[0].stats[0]
                                     +best_rolls[0].stats[1]

@@ -535,13 +535,13 @@ int read_config (void)
         config->fix_flgs = 0;
     }
 
-    if ((adom_version != 111) && (adom_version != 12018) && ((adom_version < 12020) || (adom_version > 12022)) && (config->enable_autosave != 0)) {
-	log(log_config, "Config: ADOM version not 1.1.1 or 1.2.0p18/20-22, disabling autosaver.\n");
+    if ((adom_version != 111) && (adom_version != 12018) && ((adom_version < 12020) || (adom_version > 12023)) && (config->enable_autosave != 0)) {
+	log(log_config, "Config: ADOM version not 1.1.1 or 1.2.0p18/20-23, disabling autosaver.\n");
 	config->enable_autosave = 0;
     }
 
-    if ((adom_version != 111) && (adom_version != 12018) && ((adom_version < 12020) || (adom_version > 12022)) && (config->enable_reroller != 0)) {
-	log(log_config, "Config: ADOM version not 1.1.1 or 1.2.0p18/20-22, disabling char reroller.\n");
+    if ((adom_version != 111) && (adom_version != 12018) && ((adom_version < 12020) || (adom_version > 12023)) && (config->enable_reroller != 0)) {
+	log(log_config, "Config: ADOM version not 1.1.1 or 1.2.0p18/20-23, disabling char reroller.\n");
 	config->enable_reroller = 0;
     }
 

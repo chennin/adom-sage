@@ -271,11 +271,22 @@ MSG_HANDLER(confirm_handler)
 
 // Version messages
 const char *flg_version_msg = "Version 1.2.0";
+const char *flg_version_msg_r = "Ancient Domains Of Mystery\n%s\n";
+MSG_HANDLER(flg_handler)
+{
+  int release = get_version() - 12000;
+  sprintf(str, "Ancient Domains of Mystery\nRelease %d\nwith ADOM Sage version %s\n", release, SAGE_VERSION);
+}
 
 const char *version_msg_111 = "Ancient Domains of Mystery__ Version 1.1.1";
 const char *version_msg_100 = "Ancient Domains of Mystery__ Version 1.0.0";
 const char *version_msg_120 = "Ancient Domains of Mystery__ Version 1.2.0";
-
+const char *version_msg_r = "Ancient Domains of Mystery %s";
+MSG_HANDLER(version_handler)
+{
+  int release = get_version() - 12000;
+  sprintf(str, "Ancient Domains of Mystery (release %d) with ADOM Sage version %s", release, SAGE_VERSION);
+}
 /*---------------------------------------------------------------------------
  * Initialization
  */
@@ -341,8 +352,12 @@ void init_msg_maps(void)
     short color = COLOR_WHITE;
     get_color("yellow", &attr, &color);
     (*main_msgmap)[flg_version_msg] = new MsgInfo("Version 1.2.0 with ADOM Sage " SAGE_VERSION);
+    (*main_msgmap)[flg_version_msg_r] = new MsgInfo(flg_handler, NULL);
     (*main_msgmap)[version_msg_111] = new MsgInfo(0, attr, color, "Ancient Domains of Mystery__ Version 1.1.1 with ADOM Sage " SAGE_VERSION);
     (*main_msgmap)[version_msg_100] = new MsgInfo(0, attr, color, "Ancient Domains of Mystery__ Version 1.0.0 with ADOM Sage " SAGE_VERSION);
     (*main_msgmap)[version_msg_120] = new MsgInfo(0, attr, color, "Ancient Domains of Mystery__ Version 1.2.0 with ADOM Sage " SAGE_VERSION);
+    (*main_msgmap)[version_msg_r] = new MsgInfo(version_handler, NULL);
+    (*main_msgmap)[version_msg_r]->color = color;
+    (*main_msgmap)[version_msg_r]->attr = attr;
 }
 

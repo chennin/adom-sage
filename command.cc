@@ -429,6 +429,11 @@ int read_keymaps (void)
                "have run ADOM.  After ADOM displays its welcome screen, please exit the game\n"
                "and rerun it so that ADOM Sage can properly initialize.\n\n"
 	       "Sage is now entering PASSIVE MODE.\n\n");
+        if (get_version() == 12048) {
+                printf("\x1B[31mDOUBLE WARNING:\x1B[0m\n"
+                       "\x1B[33mADOM r48 is known to have a crash-on-first-run bug. Just get through\n"
+                       "the following crash and restart the game.\x1B[0m\n\n");
+        }
         printf("\n[PRESS ENTER TO CONTINUE]\n");
 	config->passive = 1;
         getchar();

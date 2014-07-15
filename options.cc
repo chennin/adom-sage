@@ -555,6 +555,11 @@ int read_config (void)
         config->mindcraft_stats = 0;
     }
 
+    if ((adom_version >= 12048) && (config->short_named_monsters != 0)) {
+        log(log_config, "Config: ADOM version r48 or greater detected, disabling name shortening.\n");
+        config->short_named_monsters = 0;
+    }
+
     return 1;
 }
 

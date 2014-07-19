@@ -36,7 +36,7 @@ static void reseed_rng() {
   uint16_t *rng12022 = (uint16_t *)0x082f5d60;
   uint16_t *rng12023 = (uint16_t *)0x082f6dc0;
   uint16_t *rng12048 = (uint16_t *)0x083316a0;
-  uint16_t *rng12049 = (uint16_t *)0x08082e07;
+  uint16_t *rng12049 = (uint16_t *)0x08332c60;
   int adom_version = get_version();
   if (adom_version == 111) {
     for (int i=0; i < (0x100/2); i++)
@@ -432,7 +432,7 @@ static void child() {
 
   // patch roll end
   *((char**)ROLLEND_ADDR) = ((char*)(&roll_end)) - ROLLEND_ADDR - 4;
-  if ((adom_version >= 12021) && (adom_version <= 12048)) {
+  if ((adom_version >= 12021) && (adom_version <= 12049)) {
     memset((void*)(ROLLEND_ADDR - 1), 0xE8, 1);
   }
 

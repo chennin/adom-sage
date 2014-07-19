@@ -88,6 +88,9 @@ void inject_my_starsign(void) {
         else if (adom_version == 12048) {
                 INJECT_STARSIGN = 0x08165aca;
         }
+        else if (adom_version == 12049) {
+                INJECT_STARSIGN = 0x0816653a;
+        }
 	if (INJECT_STARSIGN == 0) {
 		printf("Don't know where to inject a function to.  Unknown ADOM version %i ?\n", adom_version);
 		return;
@@ -138,6 +141,10 @@ void inject_autosaver(void) {
                 COMMAND_ADDR = 0x080931a0;
                 SAVE_ADDR = 0x08093be4;
         }
+        else if (adom_version == 12049) {
+                COMMAND_ADDR = 0x0809331d;
+                SAVE_ADDR = 0x08093d64;
+        }
 	else {
 		printf("Don't know where to inject autosaver. Unknown ADOM version %i ?\n", adom_version);
 		return;
@@ -183,6 +190,9 @@ void inject_roller(void) {
         }
         else if (adom_version == 12048) {
                 ROLL_ADDR = 0x08082ced;
+        }
+        else if (adom_version == 12049) {
+                ROLL_ADDR = 0x08082e07;
         }
 	else {
 		printf("Don't know where to inject roller. Unknown ADOM version %i ?\n", adom_version);

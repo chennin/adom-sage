@@ -73,6 +73,14 @@ static int autosave(int patch_really_save) {
       QUIT_ADDR = 0x08082ad0;
       RETURN_ADDR = 0xecc53008;
     }
+    else if (adom_version == 12049) {
+      REALLY_SAVE_ADDR = 0x08093d54;
+      SAVE_ADDR = 0x083af9c8;
+      SPACEBAR_ADDR = 0x0804b7c0;
+      TEMP_FILES_ADDR = 0x08144a00;
+      QUIT_ADDR = 0x08082be0;
+      RETURN_ADDR = 0xacdb3008;
+    }
     else {
       printf("Don't know where to inject autosaver. Unknown ADOM version %i ?\n", adom_version);
       return 2;
@@ -145,6 +153,10 @@ static int autosave(int patch_really_save) {
       SVG_ADDR = 0x080dd4b0;
       MSG_ADDR = 0x0804c330;
     }
+    else if (adom_version == 12049) {
+      SVG_ADDR = 0x080dd970;
+      MSG_ADDR = 0x0804c3b0;
+    }
     else {
       printf("Don't know where to inject autosaver. Unknown ADOM version %i ?\n", adom_version);
       return 2;
@@ -154,11 +166,17 @@ static int autosave(int patch_really_save) {
     wait(NULL);
 
     char* (*get_svg_name)() = (char*(*)())SVG_ADDR;
+    // Back up save game to backup folder.  Try to create backup directory.
+    char homedir[1024];
+    char backupdir[1043];
     char svg_path[2048];
     char new_path[2048];
 
-    snprintf(svg_path, 2048, "%s/.adom.data/savedg/%s", getpwuid(getuid())->pw_dir, get_svg_name());
-    snprintf(new_path, 2048, "%s/.adom.data/backup/%s", getpwuid(getuid())->pw_dir, get_svg_name());
+    snprintf(homedir, 1024, "%s", getpwuid(getuid())->pw_dir);
+    snprintf(backupdir, 1043, "%s/.adom.data/backup", homedir);
+    mkdir(backupdir,S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+    snprintf(svg_path, 2048, "%s/.adom.data/savedg/%s", homedir, get_svg_name());
+    snprintf(new_path, 2048, "%s/%s", backupdir, get_svg_name());
 
     if(!rename(svg_path, new_path)) {
       adom_msg("NOTICE: backup .svg created!");
@@ -204,6 +222,10 @@ void command_hook() {
     REFRESH_ADDR = 0x0804b980;
     TURN_ADDR = 0x08342584;
   }
+  else if (adom_version == 12049) {
+    REFRESH_ADDR = 0x0804b990;
+    TURN_ADDR = 0x08343b44;
+  }
   else {
     printf("Don't know where to inject autosaver. Unknown ADOM version %i ?\n", adom_version);
     return;
@@ -241,6 +263,9 @@ int save_hook(char *msg, int a, char b) {
   }
   else if (adom_version == 12048) {
     PASK_ADDR = 0x0804c660;
+  }
+  else if (adom_version == 12049) {
+    PASK_ADDR = 0x0804c6e0;
   }
   else {
     printf("Don't know where to inject autosaver. Unknown ADOM version %i ?\n", adom_version);

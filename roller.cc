@@ -38,6 +38,8 @@ static void reseed_rng() {
   uint16_t *rng12048 = (uint16_t *)0x083316a0;
   uint16_t *rng12049 = (uint16_t *)0x08332c60;
   uint16_t *rng12051 = (uint16_t *)0x0845a000;
+  uint16_t *rng12055 = (uint16_t *)0x0845af80;
+  uint16_t *rng12059 = (uint16_t *)0x0846d540;
   int adom_version = get_version();
   if (adom_version == 111) {
     for (int i=0; i < (0x100/2); i++)
@@ -74,6 +76,14 @@ static void reseed_rng() {
   else if (adom_version == 12051) {
     for (int i=0; i < (0x100/2); i++)
       rng12051[i] = rand();
+  }
+  else if (adom_version == 12055) {
+    for (int i=0; i < (0x100/2); i++)
+      rng12055[i] = rand();
+  }
+  else if (adom_version == 12059) {
+    for (int i=0; i < (0x100/2); i++)
+      rng12059[i] = rand();
   }
   else {
     printf("Don't know where to inject roller. Unknown ADOM version %i ?\n", adom_version);
@@ -296,6 +306,16 @@ static void roll_end(unsigned int talents, void *b, void *c, unsigned int ntalen
     ITEMS_ADDR = 0x0844EBC0;
     BOOKS_ADDR = 0x084506A0;
   }
+  else if (adom_version == 12055) {
+    STATS_ADDR = 0x0846bf0c;
+    ITEMS_ADDR = 0x0844fb40;
+    BOOKS_ADDR = 0x08451620;
+  }
+  else if (adom_version == 12059) {
+    STATS_ADDR = 0x0847e9cc;
+    ITEMS_ADDR = 0x0845a880;
+    BOOKS_ADDR = 0x0845c360;
+  }
   else {
     printf("Don't know where to inject roller. Unknown ADOM version %i ?\n", adom_version);
     return;
@@ -403,6 +423,26 @@ static void child() {
     RESUME_ADDR = 0x08089310;
     CORR_ADDR = 0x08148083;
   }
+  else if (adom_version == 12055) {
+    PATCH1_ADDR = 0x0808afea;
+    PATCH2_ADDR = 0x0808b64c;
+    PATCH3_ADDR = 0x0808b677;
+    CNT_ADDR = 0x08088ebf;
+    TALENT_ADDR = 0x081856c4;
+    ROLLEND_ADDR = 0x081856c8;
+    RESUME_ADDR = 0x080897c0;
+    CORR_ADDR = 0x08148d13;
+  }
+  else if (adom_version == 12059) {
+    PATCH1_ADDR = 0x0808D7CA;
+    PATCH2_ADDR = 0x0808dc73;
+    PATCH3_ADDR = 0x0808dc9e;
+    CNT_ADDR = 0x0808b84f;
+    TALENT_ADDR = 0x0818b9f4;
+    ROLLEND_ADDR = 0x0818b9f8;
+    RESUME_ADDR = 0x0808c160;
+    CORR_ADDR = 0x0814E7FD;
+  }
   else {
     printf("Don't know where to inject roller. Unknown ADOM version %i ?\n", adom_version);
     return;
@@ -452,7 +492,7 @@ static void child() {
 
   // patch roll end
   *((char**)ROLLEND_ADDR) = ((char*)(&roll_end)) - ROLLEND_ADDR - 4;
-  if ((adom_version >= 12021) && (adom_version <= 12051)) {
+  if ((adom_version >= 12021) && (adom_version <= 12059)) {
     memset((void*)(ROLLEND_ADDR - 1), 0xE8, 1);
   }
 
@@ -541,6 +581,12 @@ static int process_roll_result(RollResult *best_rolls) {
   else if (adom_version == 12051) {
     RNG_ADDR = 0x0845a000;
   }
+  else if (adom_version == 12055) {
+    RNG_ADDR = 0x0845af80;
+  }
+  else if (adom_version == 12059) {
+    RNG_ADDR = 0x0846d540;
+  }
   else {
     printf("Don't know where to inject roller. Unknown ADOM version %i ?\n", adom_version);
     return 2;
@@ -616,6 +662,14 @@ void roll_start() {
   else if (adom_version == 12051) {
     RNG_ADDR = 0x0845a000;
     RESUME_ADDR = 0x08089310;
+  }
+  else if (adom_version == 12055) {
+    RNG_ADDR = 0x0845af80;
+    RESUME_ADDR = 0x080897c0;
+  }
+  else if (adom_version == 12059) {
+    RNG_ADDR = 0x0846d540;
+    RESUME_ADDR = 0x0808c160;
   }
   else {
     printf("Don't know where to inject roller. Unknown ADOM version %i ?\n", adom_version);
